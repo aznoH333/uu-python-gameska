@@ -16,15 +16,17 @@ class Engine:
         self.clock = pygame.time.Clock()
         self.delta = 0
         self.keys = None
+        self.is_game_running = True
         pass
 
     def set_game_speed(self, speed):
         self.game_speed = speed
 
     def update(self):
+        
         # poll events
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 pygame.quit()
                 sys.exit()
         
@@ -35,8 +37,11 @@ class Engine:
         # calculate delta
         self.delta = self.clock.tick(self.game_speed) / self.game_speed
 
+
     def get_delta(self):
         return self.delta
     
     def is_key_down(self, key):
         return self.keys[key]
+    
+
