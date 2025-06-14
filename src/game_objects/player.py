@@ -44,8 +44,6 @@ class Player(BaseObject):
             self.ym += self.GRAVITY
 
 
-
-
         # update values
         self.x += self.xm 
         self.y += self.ym

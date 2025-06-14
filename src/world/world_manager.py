@@ -99,7 +99,7 @@ class WorldManager:
         return False
     
     def convert_to_world_y(self, y):
-        return y - self.depth
+        return y - self.depth + self.world_offset
     
     def get_depth(self):
         return self.depth
