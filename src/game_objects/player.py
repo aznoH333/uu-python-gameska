@@ -38,9 +38,15 @@ class Player(BaseObject):
 
 
         # gravity and on ground stuff
-        self.tile_bellow = self.world.collides_with_tile(self.x, self.y + self.ym + 1, self.width, self.height)
+        self.tile_bellow = self.world.collides_with_tile(self.x, self.y + 1, self.width, self.height)
         self.tile_left = self.x + self.xm > 0 and self.world.collides_with_tile(self.x + self.xm - 1, self.y, self.width, self.height)
         self.tile_right = self.x + self.xm + self.width + (self.width / 2)< self.world.TOTAL_WIDTH and self.world.collides_with_tile(self.x + self.xm + 1, self.y, self.width, self.height)
+
+        # jumping
+        if self.tile_bellow and self.engine.is_key_down(pygame.K_UP):
+            self.tile_bellow = False 
+            self.ym = -self.JUMP_STRENGTH
+
 
         # horizontal collisions
         if self.world.collides_with_tile(self.x + self.xm + signum(self.xm), self.y, self.width, self.height):
@@ -53,7 +59,7 @@ class Player(BaseObject):
             self.ym += self.GRAVITY
 
 
-
+        
 
         # update values
         self.x += self.xm 
@@ -75,14 +81,12 @@ class Player(BaseObject):
             self.world.damage_tile(self.x + self.width + (self.width / 2), self.y + (self.height / 2))
 
 
-        # jumping
-        if self.tile_bellow and self.engine.is_key_down(pygame.K_UP):
-            self.tile_bellow = False 
-            self.ym = -self.JUMP_STRENGTH
+        
         
         # world progress
         if self.world.convert_to_world_y(self.y) > 200:
             self.world.progress_by(self.world.convert_to_world_y(self.y) - 200)
 
+        self.drawing_man.draw_text(f"{self.tile_bellow}", 30, 30)
 
     
