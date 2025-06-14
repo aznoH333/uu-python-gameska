@@ -12,13 +12,13 @@ class Player(BaseObject):
     def update(self):
 
 
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            self.x -= self.engine.get_delta() * 20
-        if keys[pygame.K_RIGHT]:
-            self.x += self.engine.get_delta() * 20
-        if keys[pygame.K_UP]:
-            self.y -= self.engine.get_delta() * 20
-        if keys[pygame.K_DOWN]:
-            self.y += self.engine.get_delta() * 20
+        if self.engine.is_key_down(pygame.K_LEFT):
+            self.x -= self.engine.get_delta() * 5
+        if self.engine.is_key_down(pygame.K_RIGHT):
+            self.x += self.engine.get_delta() * 5
+        if self.engine.is_key_down(pygame.K_UP):
+            self.y -= self.engine.get_delta() * 5
+        if self.engine.is_key_down(pygame.K_DOWN):
+            self.y += self.engine.get_delta() * 5
+
         
