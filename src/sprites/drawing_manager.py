@@ -54,3 +54,7 @@ class DrawingManager:
 
     def update_screen(self):
         self.screen.fill((0, 0, 0))
+
+    def draw_debug_pixel(self, x, y, color):
+        self.coloring_surface.fill(color)
+        self.screen.blit(self.coloring_surface, (x * self.GAME_ZOOM, y * self.GAME_ZOOM), (0, 0, self.GAME_ZOOM, self.GAME_ZOOM))

@@ -38,7 +38,7 @@ class Player(BaseObject):
 
         # gravity and on ground stuff
         self.tile_bellow = self.world.collides_with_tile(self.x, self.y + self.ym + 1, self.width, self.height)
-        self.tile_left = self.x + self.xm > 0 and self.world.collides_with_tile(self.x - self.xm - 1, self.y, self.width, self.height)
+        self.tile_left = self.x + self.xm > 0 and self.world.collides_with_tile(self.x + self.xm - 1, self.y, self.width, self.height, True)
         self.tile_right = self.x + self.xm + self.width + (self.width / 2)< self.world.TOTAL_WIDTH and self.world.collides_with_tile(self.x + self.xm + 1, self.y, self.width, self.height)
 
         # horizontal collisions
@@ -68,19 +68,15 @@ class Player(BaseObject):
             self.world.damage_tile(self.x, self.y + self.height)
 
         if self.engine.is_key_down(pygame.K_LEFT) and self.tile_left:
-            self.world.damage_tile(self.x - (self.width / 2), self.y + (self.height / 2))
+            self.world.damage_tile(self.x - self.width, self.y + (self.height / 2))
             
         if self.engine.is_key_down(pygame.K_RIGHT) and self.tile_right:
             self.world.damage_tile(self.x + self.width + (self.width / 2), self.y + (self.height / 2))
-
 
         
         # world progress
         if self.world.convert_to_world_y(self.y) > 200:
             self.world.progress_by(self.world.convert_to_world_y(self.y) - 200)
 
-
-        #debug
-        self.drawing_man.draw_text(f"{self.tile_left} {self.x + self.xm > 0}", 60, 60)
 
     

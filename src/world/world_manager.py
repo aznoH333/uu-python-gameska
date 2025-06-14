@@ -76,7 +76,7 @@ class WorldManager:
         return self.tiles[y % self.WORLD_HEIGHT][x]
 
 
-    def collides_with_tile(self, x, y, w, h):
+    def collides_with_tile(self, x, y, w, h, debug_draw = False):
         y = self.convert_to_world_y(y)
         
 
@@ -88,6 +88,9 @@ class WorldManager:
             for y_iterator in range(math.floor(y), math.ceil(y+h)+1):
                 converted_x = math.floor(x_iterator / self.TILE_SIZE)
                 converted_y = math.floor(y_iterator / self.TILE_SIZE)
+
+                if debug_draw:
+                    self.drawing_man.draw_debug_pixel(x_iterator, y_iterator - self.world_offset, (255, 255, 255))
 
                 if converted_x < 0 or converted_x >= self.WORLD_WIDTH or self.get_tile_from_world_coord(converted_x, converted_y).is_solid():
                     return True
