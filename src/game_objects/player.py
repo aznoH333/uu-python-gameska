@@ -1,6 +1,6 @@
 import math
 from engine.engine import Engine
-from engine.utils import gravitate_number
+from engine.utils import gravitate_number, signum
 from objects.base_object import BaseObject
 import pygame
 from world.world_manager import WorldManager
@@ -9,8 +9,8 @@ from world.world_manager import WorldManager
 class Player(BaseObject):
     
 
-    SPEED = 7
-    ACCELERATION = 0.5
+    SPEED = 5
+    ACCELERATION = 0.1
     GRAVITY = 0.1
 
     def __init__(self, x, y):
@@ -19,7 +19,9 @@ class Player(BaseObject):
         self.world = WorldManager.get_instance()
         self.xm = 0
         self.ym = 0
-        self.on_ground = False
+        self.tile_bellow = False
+        self.tile_left = False
+        self.tile_right = False
 
     def update(self):
 
@@ -33,13 +35,18 @@ class Player(BaseObject):
 
 
         # gravity and on ground stuff
-        self.on_ground = self.world.collides_with_tile(self.x, self.y + self.ym + 1, self.width, self.height)
-            
-        
-        if self.on_ground:
-            self.ym = 0
-            #self.y = self.y - (math.floor(self.y / self.world.TILE_SIZE) * self.world.TILE_SIZE)
+        self.tile_bellow = self.world.collides_with_tile(self.x, self.y + self.ym + 1, self.width, self.height)
+        self.tile_left = self.x + self.xm > 0 and self.world.collides_with_tile(self.x - self.xm - 1, self.y, self.width, self.height)
+        self.tile_right = self.x + self.xm < self.world.TOTAL_WIDTH and self.world.collides_with_tile(self.x + self.xm + 1, self.y, self.width, self.height)
 
+
+        # horizontal collisions
+        if self.world.collides_with_tile(self.x + self.xm + signum(self.xm), self.y, self.width, self.height):
+            self.xm = 0
+
+        # vertical collisions
+        if self.world.collides_with_tile(self.x, self.y + self.ym + signum(self.ym), self.width, self.height) or self.tile_bellow:
+            self.ym = 0
         else:
             self.ym += self.GRAVITY
 
@@ -47,6 +54,10 @@ class Player(BaseObject):
         # update values
         self.x += self.xm 
         self.y += self.ym
+
+        #mining
+        if self.engine.is_key_down(pygame.K_DOWN) and self.tile_bellow:
+            self.world.damage_tile(self.x, self.y + self.height)
 
     
 

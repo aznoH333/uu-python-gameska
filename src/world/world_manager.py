@@ -19,6 +19,7 @@ class WorldManager:
 
     WORLD_WIDTH = 20
     WORLD_HEIGHT = 13
+    TOTAL_WIDTH = WORLD_WIDTH * TILE_SIZE
 
     def __init__(self):
         self.tiles = []
@@ -85,7 +86,7 @@ class WorldManager:
         end_y = start_y + 1 + math.ceil(h / self.TILE_SIZE)
 
 
-        if x < 0 or x > self.WORLD_WIDTH * self.TILE_SIZE:
+        if start_x < 0 or end_x > self.WORLD_WIDTH:
             return True
 
 
@@ -103,3 +104,16 @@ class WorldManager:
     
     def get_depth(self):
         return self.depth
+    
+
+
+    def damage_tile(self, x, y):
+        converted_x = round((x + (self.TILE_SIZE / 2)) / self.TILE_SIZE)
+        converted_y = round((y + (self.TILE_SIZE / 2)) / self.TILE_SIZE)
+        if converted_x < 0 or converted_x > self.WORLD_WIDTH:
+            return
+        
+        tile = self.get_tile_from_world_coord(converted_x, converted_y)
+
+        # TODO tile toughness
+        tile.set_tile(False, 1)
