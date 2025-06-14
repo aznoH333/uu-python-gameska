@@ -20,6 +20,7 @@ class Player(BaseObject):
     ACCELERATION = 0.1
     GRAVITY = 0.1
     JUMP_STRENGTH = 3.5
+    MINING_COOLDOWN = 20
 
     def __init__(self, x, y):
         super().__init__(x, y, self.RIGHT_SPRITE_INDEX, 20, 20, -6, -10)
@@ -32,6 +33,8 @@ class Player(BaseObject):
         self.tile_left = False
         self.tile_right = False
         self.direction = PlayerDirection.RIGHT
+        self.mining_power = 10 # TODO : mining power upgrades
+        self.mining_cooldown = 0
 
     def update(self):
         delta = self.engine.get_delta()
@@ -80,15 +83,22 @@ class Player(BaseObject):
             self.y -= 1
 
         #mining
-        if self.engine.is_key_down(pygame.K_DOWN) and self.tile_bellow:
-            self.world.damage_tile(self.x, self.y + self.height)
-            self.direction = PlayerDirection.DOWN
+        if self.mining_cooldown <= 0:
+            if self.engine.is_key_down(pygame.K_DOWN) and self.tile_bellow:
+                self.world.damage_tile(self.x, self.y + self.height, self.mining_power)
+                self.direction = PlayerDirection.DOWN
+                self.reset_mining_cooldown()
 
-        if self.engine.is_key_down(pygame.K_LEFT) and self.tile_left and self.tile_bellow:
-            self.world.damage_tile(self.x - self.width, self.y)
-            
-        if self.engine.is_key_down(pygame.K_RIGHT) and self.tile_right and self.tile_bellow:
-            self.world.damage_tile(self.x + self.width + (self.width / 2), self.y)
+            if self.engine.is_key_down(pygame.K_LEFT) and self.tile_left and self.tile_bellow:
+                self.world.damage_tile(self.x - self.width, self.y, self.mining_power)
+                self.reset_mining_cooldown()
+
+                
+            if self.engine.is_key_down(pygame.K_RIGHT) and self.tile_right and self.tile_bellow:
+                self.world.damage_tile(self.x + self.width + (self.width / 2), self.y, self.mining_power)
+                self.reset_mining_cooldown()
+        else:
+            self.mining_cooldown -= delta
 
 
         
@@ -116,4 +126,5 @@ class Player(BaseObject):
 
         self.sprite_index += self.engine.get_global_timer() % 20 > 10
 
-    
+    def reset_mining_cooldown(self):
+        self.mining_cooldown = self.MINING_COOLDOWN # TODO upgrades

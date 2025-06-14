@@ -62,7 +62,7 @@ class WorldManager:
     def fill_tiles(self, y):
         for x in range(0, self.WORLD_WIDTH):
             tile = self.tiles[y][x]
-            tile.set_tile(True, 0)
+            tile.set_tile(True, 0, (170, 170, 255), 50)
 
     def shift_world_up(self):
         temp = self.tiles[0]
@@ -105,7 +105,7 @@ class WorldManager:
     
 
 
-    def damage_tile(self, x, y):
+    def damage_tile(self, x, y, mining_power):
 
         converted_x = round(x / self.TILE_SIZE)
         converted_y = round(self.convert_to_world_y(y) / self.TILE_SIZE)
@@ -114,5 +114,12 @@ class WorldManager:
         
         tile = self.get_tile_from_world_coord(converted_x, converted_y)
 
-        # TODO tile toughness
-        tile.set_tile(False, 1)
+
+        tile.deal_damage(mining_power)
+
+
+        if not tile.is_stable():
+            # TODO particles
+
+            tile.set_tile(False, 1)
+            
