@@ -1,3 +1,4 @@
+import math
 from engine.engine import Engine
 from sprites.sprite_manager import SpriteManager
 from world.tile import Tile
@@ -5,6 +6,9 @@ from world.tile import Tile
 
 class WorldManager:
     instance = None
+
+    TILE_SIZE = 32
+
     def get_instance():
         if WorldManager.instance == None:
             WorldManager.instance = WorldManager()
@@ -38,15 +42,15 @@ class WorldManager:
         # draw tiles
         for y in range(0, self.WORLD_HEIGHT):
             for x in range(0, self.WORLD_WIDTH):
-                self.tiles[y][x].draw(self.sprite_man, x * self.sprite_man.SPRITE_SCALE, y * self.sprite_man.SPRITE_SCALE - self.world_offset)
+                self.tiles[y][x].draw(self.sprite_man, x * self.TILE_SIZE, y * self.TILE_SIZE - self.world_offset)
 
         # progress map
         if self.depth < self.progress_to:
             self.depth += self.progress_speed
             self.world_offset += self.progress_speed
 
-            if self.world_offset > self.sprite_man.SPRITE_SCALE:
-                self.world_offset -= self.sprite_man.SPRITE_SCALE
+            if self.world_offset > self.TILE_SIZE:
+                self.world_offset -= self.TILE_SIZE
                 self.shift_world_up()
                 self.fill_tiles(self.WORLD_HEIGHT - 1)
 
@@ -67,6 +71,27 @@ class WorldManager:
 
         self.tiles[self.WORLD_HEIGHT - 1] = temp
 
+    def get_tile_from_world_coord(self, x, y):
+        return self.tiles[y % self.WORLD_HEIGHT][x]
 
 
-    
+    def collides_with_tile(self, x, y, w, h):
+        start_x = math.floor(x / self.TILE_SIZE)
+        start_y = math.floor(y / self.TILE_SIZE)
+        # nemame technologii na for (int i = 0; i <= 1; i++)
+        end_x = start_x + 1 + math.ceil(w / self.TILE_SIZE)
+        end_y = start_y + 1 + math.ceil(h / self.TILE_SIZE)
+
+
+        if x < 0 or x > self.WORLD_WIDTH * self.TILE_SIZE:
+            return True
+
+
+        for x in range(start_x, end_x):
+            for y in range(start_y, end_y):
+                tile = self.get_tile_from_world_coord(x, y)
+
+                if tile.is_solid():
+                    return True
+        
+        return False

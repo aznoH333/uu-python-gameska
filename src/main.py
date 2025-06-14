@@ -20,6 +20,7 @@ world = WorldManager.get_instance()
 obj_man.add_object(Player(0, 0))
 
 
+
 while True:
     engine.update()
     sprite_man.update_screen()

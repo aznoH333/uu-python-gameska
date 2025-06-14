@@ -7,6 +7,8 @@ class BaseObject:
         self.width = width
         self.height = height
 
+
+
     def update():
         print("undefine update")
 
