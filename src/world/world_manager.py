@@ -108,8 +108,9 @@ class WorldManager:
 
 
     def damage_tile(self, x, y):
-        converted_x = round((x + (self.TILE_SIZE / 2)) / self.TILE_SIZE)
-        converted_y = round((y + (self.TILE_SIZE / 2)) / self.TILE_SIZE)
+
+        converted_x = round(x / self.TILE_SIZE)
+        converted_y = round(y / self.TILE_SIZE)
         if converted_x < 0 or converted_x > self.WORLD_WIDTH:
             return
         

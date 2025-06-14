@@ -24,4 +24,4 @@ class ObjectManager:
             #update
             object.update()
             #draw
-            self.sprite_man.draw_sprite(object.sprite_index, object.x, object.y - self.world.get_depth())
+            self.sprite_man.draw_sprite(object.sprite_index, object.x + object.x_offset, object.y + object.y_offset - self.world.get_depth())

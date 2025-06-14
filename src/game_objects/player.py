@@ -14,7 +14,7 @@ class Player(BaseObject):
     GRAVITY = 0.1
 
     def __init__(self, x, y):
-        super().__init__(x, y, 0, 32, 32)
+        super().__init__(x, y, 0, 20, 30, -6, 2)
         self.engine = Engine.get_instance()
         self.world = WorldManager.get_instance()
         self.xm = 0
@@ -51,14 +51,26 @@ class Player(BaseObject):
             self.ym += self.GRAVITY
 
 
+
+
         # update values
         self.x += self.xm 
         self.y += self.ym
+
+
+        # unstuck player
+        if self.world.collides_with_tile(self.x, self.y, self.width, self.height):
+            self.y -= 1
 
         #mining
         if self.engine.is_key_down(pygame.K_DOWN) and self.tile_bellow:
             self.world.damage_tile(self.x, self.y + self.height)
 
+        if self.engine.is_key_down(pygame.K_LEFT) and self.tile_left:
+            self.world.damage_tile(self.x - self.width - (self.width / 2), self.y)
+            
+        if self.engine.is_key_down(pygame.K_RIGHT) and self.tile_right:
+            self.world.damage_tile(self.x + self.width + (self.width / 2), self.y)
 
 
     
