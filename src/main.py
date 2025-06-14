@@ -24,6 +24,10 @@ while True:
     engine.update()
     sprite_man.update_screen()
     
+
+    if engine.is_key_down(pygame.K_SPACE):
+        world.progress_by(1)
+
     world.update()
     obj_man.update()
     pygame.display.flip()
