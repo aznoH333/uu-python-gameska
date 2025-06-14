@@ -15,7 +15,7 @@ class Player(BaseObject):
     DOWN_SPRITE_INDEX = 20
 
 
-    SPEED = 5
+    SPEED = 3
     ACCELERATION = 0.1
     GRAVITY = 0.1
     JUMP_STRENGTH = 3.5
@@ -33,16 +33,16 @@ class Player(BaseObject):
         self.direction = PlayerDirection.RIGHT
 
     def update(self):
-
+        delta = self.engine.get_delta()
         # accelerate
         if self.engine.is_key_down(pygame.K_LEFT):
-            self.xm = gravitate_number(self.xm, -self.SPEED, self.ACCELERATION)
+            self.xm = gravitate_number(self.xm, -self.SPEED, self.ACCELERATION * delta)
             self.direction = PlayerDirection.LEFT
         elif self.engine.is_key_down(pygame.K_RIGHT):
-            self.xm = gravitate_number(self.xm, self.SPEED, self.ACCELERATION)
+            self.xm = gravitate_number(self.xm, self.SPEED, self.ACCELERATION * delta)
             self.direction = PlayerDirection.RIGHT
         else:
-            self.xm = gravitate_number(self.xm, 0, self.ACCELERATION)
+            self.xm = gravitate_number(self.xm, 0, self.ACCELERATION * delta)
 
 
         # gravity and on ground stuff
@@ -64,14 +64,14 @@ class Player(BaseObject):
         if self.world.collides_with_tile(self.x, self.y + self.ym + signum(self.ym), self.width, self.height) or self.tile_bellow:
             self.ym = 0
         else:
-            self.ym += self.GRAVITY
+            self.ym += self.GRAVITY * delta
 
 
         
 
         # update values
-        self.x += self.xm 
-        self.y += self.ym
+        self.x += self.xm * delta
+        self.y += self.ym * delta
 
 
         # unstuck player

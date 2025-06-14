@@ -13,17 +13,15 @@ class Engine:
         return Engine.instance
     
     def __init__(self):
-        self.game_speed = 660
-        self.clock = pygame.time.Clock()
         self.delta = 0
+        self.tick_time = 0
+        self.last_tick_time = 0
         self.timer = 0
         self.keys = None
         self.is_game_running = True
 
         pass
 
-    def set_game_speed(self, speed):
-        self.game_speed = speed
 
     def update(self):
         
@@ -38,9 +36,11 @@ class Engine:
 
 
         # calculate delta
-        self.delta = self.clock.tick(self.game_speed) / self.game_speed
-        self.timer += self.delta
+        self.tick_time = pygame.time.get_ticks()
+        self.delta = (self.tick_time - self.last_tick_time) / 16.6666 # simulate 60 fps
+        self.last_tick_time = self.tick_time
 
+        self.timer += self.delta
 
     def get_delta(self):
         return self.delta
