@@ -13,7 +13,8 @@ class Player(BaseObject):
     LEFT_SPRITE_INDEX = 18
     RIGHT_SPRITE_INDEX = 22
     DOWN_SPRITE_INDEX = 20
-
+    BASE_Y_OFFSET = -10
+    DOWN_Y_OFFSET = -5
 
     SPEED = 3
     ACCELERATION = 0.1
@@ -21,7 +22,7 @@ class Player(BaseObject):
     JUMP_STRENGTH = 3.5
 
     def __init__(self, x, y):
-        super().__init__(x, y, self.RIGHT_SPRITE_INDEX, 20, 30, -6, 2)
+        super().__init__(x, y, self.RIGHT_SPRITE_INDEX, 20, 20, -6, -10)
         self.engine = Engine.get_instance()
         self.world = WorldManager.get_instance()
         self.drawing_man = DrawingManager.get_instance()
@@ -81,12 +82,13 @@ class Player(BaseObject):
         #mining
         if self.engine.is_key_down(pygame.K_DOWN) and self.tile_bellow:
             self.world.damage_tile(self.x, self.y + self.height)
+            self.direction = PlayerDirection.DOWN
 
         if self.engine.is_key_down(pygame.K_LEFT) and self.tile_left and self.tile_bellow:
-            self.world.damage_tile(self.x - self.width, self.y + (self.height / 2))
+            self.world.damage_tile(self.x - self.width, self.y)
             
         if self.engine.is_key_down(pygame.K_RIGHT) and self.tile_right and self.tile_bellow:
-            self.world.damage_tile(self.x + self.width + (self.width / 2), self.y + (self.height / 2))
+            self.world.damage_tile(self.x + self.width + (self.width / 2), self.y)
 
 
         
@@ -99,6 +101,9 @@ class Player(BaseObject):
 
 
         # update sprite
+
+        self.y_offset = self.BASE_Y_OFFSET
+
         # i am too lazy to implement sprite flipping so this hacky workaround will be good enough
         match (self.direction):
             case PlayerDirection.LEFT:
@@ -107,6 +112,7 @@ class Player(BaseObject):
                 self.sprite_index = self.RIGHT_SPRITE_INDEX
             case PlayerDirection.DOWN:
                 self.sprite_index = self.DOWN_SPRITE_INDEX
+                self.y_offset = self.DOWN_Y_OFFSET
 
         self.sprite_index += self.engine.get_global_timer() % 20 > 10
 
