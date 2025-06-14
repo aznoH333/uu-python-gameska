@@ -14,6 +14,7 @@ class ObjectManager:
         self.objects = []
         self.drawing_man = DrawingManager.get_instance()
         self.world = WorldManager.get_instance()
+        self.world.obj_man = self # dependency circle of shame
 
 
     def add_object(self, object):
@@ -24,4 +25,7 @@ class ObjectManager:
             #update
             object.update()
             #draw
-            self.drawing_man.draw_sprite(object.sprite_index, object.x + object.x_offset, object.y + object.y_offset - self.world.get_depth())
+            self.drawing_man.draw_sprite(object.sprite_index, object.x + object.x_offset, object.y + object.y_offset - self.world.get_depth(), object.color)
+        
+            if object.wants_to_be_alive == False:
+                self.objects.remove(object)

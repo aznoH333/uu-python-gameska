@@ -40,3 +40,6 @@ class Tile:
     
     def deal_damage(self, mining_power):
         self.damage += mining_power
+
+    def get_particle_color(self):
+        return self.color # TODO ores

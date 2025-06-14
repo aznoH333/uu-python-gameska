@@ -1,7 +1,9 @@
 import math
 from engine.engine import Engine
+from game_objects.rock_particle import RockParticle
 from sprites.drawing_manager import DrawingManager
 from world.tile import Tile
+import random
 
 
 class WorldManager:
@@ -29,6 +31,7 @@ class WorldManager:
         self.world_offset = 0
         self.drawing_man = DrawingManager.get_instance()
         self.engine = Engine.get_instance()
+        self.obj_man = None
 
         # prefill with tiles
         for i in range(0, self.WORLD_HEIGHT):
@@ -106,21 +109,34 @@ class WorldManager:
 
 
     def damage_tile(self, x, y, mining_power):
-
+        # find tile
         converted_x = round(x / self.TILE_SIZE)
         converted_y = round(self.convert_to_world_y(y) / self.TILE_SIZE)
         if converted_x < 0 or converted_x > self.WORLD_WIDTH:
             return
         
         tile = self.get_tile_from_world_coord(converted_x, converted_y)
+        # check if exists
+        if not tile.is_solid():
+            return
+        
+        # damage tile
         self.drawing_man.add_screen_shake(3)
-
         tile.deal_damage(mining_power)
 
-
+        particle_x = round(x / self.TILE_SIZE) * self.TILE_SIZE + (self.TILE_SIZE / 2)
+        particle_y = round(y / self.TILE_SIZE) * self.TILE_SIZE + (self.TILE_SIZE / 2)
+        for _ in range(0, random.randint(2, 4)):
+            self.obj_man.add_object(RockParticle(particle_x + random.randint(-6, 6), particle_y + random.randint(-6, 6), tile.get_particle_color()))
+        # kill tile
         if not tile.is_stable():
-            # TODO particles
+            for _ in range(0, random.randint(6, 8)):
+                self.obj_man.add_object(RockParticle(particle_x + random.randint(-6, 6), particle_y + random.randint(-6, 6), tile.get_particle_color()))
+
             tile.set_tile(False, 1)
             self.drawing_man.add_screen_shake(5)
+
+
+        
 
             
