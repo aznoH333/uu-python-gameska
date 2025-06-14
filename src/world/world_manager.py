@@ -79,22 +79,17 @@ class WorldManager:
     def collides_with_tile(self, x, y, w, h):
         y = self.convert_to_world_y(y)
         
-        start_x = math.floor(x / self.TILE_SIZE)
-        start_y = math.floor(y / self.TILE_SIZE)
-        # nemame technologii na for (int i = 0; i <= 1; i++)
-        end_x = start_x + 2 + math.floor(w / self.TILE_SIZE)
-        end_y = start_y + 2 + math.floor(h / self.TILE_SIZE)
 
+        # this could be optimized if i bothered to learn for loops properly
+        # oh well
+        # the c version of this would use conditional step size
+        # hovewer we dont have the technology to do that in python
+        for x_iterator in range(math.floor(x), math.ceil(x+w)+1):
+            for y_iterator in range(math.floor(y), math.ceil(y+h)+1):
+                converted_x = math.floor(x_iterator / self.TILE_SIZE)
+                converted_y = math.floor(y_iterator / self.TILE_SIZE)
 
-        if start_x < 0 or end_x > self.WORLD_WIDTH:
-            return True
-
-
-        for x in range(start_x, end_x):
-            for y in range(start_y, end_y):
-                tile = self.get_tile_from_world_coord(x, y)
-
-                if tile.is_solid():
+                if converted_x < 0 or converted_x >= self.WORLD_WIDTH or self.get_tile_from_world_coord(converted_x, converted_y).is_solid():
                     return True
         
         return False
