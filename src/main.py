@@ -3,7 +3,7 @@ import pygame, sys
 from engine.engine import Engine
 from game_objects.player import Player
 from objects.object_manager import ObjectManager
-from sprites.sprite_manager import SpriteManager
+from sprites.drawing_manager import DrawingManager
 from world.world_manager import WorldManager
 
 pygame.init()
@@ -11,7 +11,7 @@ pygame.display.set_caption("Python gameska")
 
 
 # init managers
-sprite_man = SpriteManager.get_instance()
+drawing_man = DrawingManager.get_instance()
 obj_man = ObjectManager.get_instance()
 engine = Engine.get_instance()
 world = WorldManager.get_instance()
@@ -23,9 +23,9 @@ obj_man.add_object(Player(0, 0))
 
 while True:
     engine.update()
-    sprite_man.update_screen()
+    drawing_man.update_screen()
     
-
+    drawing_man.draw_text("beans", 40, 40)
     if engine.is_key_down(pygame.K_SPACE):
         world.progress_by(1)
 

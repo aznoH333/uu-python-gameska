@@ -1,4 +1,4 @@
-from sprites.sprite_manager import SpriteManager
+from sprites.drawing_manager import DrawingManager
 from world.world_manager import WorldManager
 
 
@@ -12,7 +12,7 @@ class ObjectManager:
     
     def __init__(self):
         self.objects = []
-        self.sprite_man = SpriteManager.get_instance()
+        self.drawing_man = DrawingManager.get_instance()
         self.world = WorldManager.get_instance()
 
 
@@ -24,4 +24,4 @@ class ObjectManager:
             #update
             object.update()
             #draw
-            self.sprite_man.draw_sprite(object.sprite_index, object.x + object.x_offset, object.y + object.y_offset - self.world.get_depth())
+            self.drawing_man.draw_sprite(object.sprite_index, object.x + object.x_offset, object.y + object.y_offset - self.world.get_depth())

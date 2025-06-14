@@ -1,6 +1,6 @@
 import math
 from engine.engine import Engine
-from sprites.sprite_manager import SpriteManager
+from sprites.drawing_manager import DrawingManager
 from world.tile import Tile
 
 
@@ -27,7 +27,7 @@ class WorldManager:
         self.progress_to = 0
         self.progress_speed = 1
         self.world_offset = 0
-        self.sprite_man = SpriteManager.get_instance()
+        self.drawing_man = DrawingManager.get_instance()
         self.engine = Engine.get_instance()
 
         # prefill with tiles
@@ -43,7 +43,7 @@ class WorldManager:
         # draw tiles
         for y in range(0, self.WORLD_HEIGHT):
             for x in range(0, self.WORLD_WIDTH):
-                self.tiles[y][x].draw(self.sprite_man, x * self.TILE_SIZE, y * self.TILE_SIZE - self.world_offset)
+                self.tiles[y][x].draw(self.drawing_man, x * self.TILE_SIZE, y * self.TILE_SIZE - self.world_offset)
 
         # progress map
         if self.depth < self.progress_to:
@@ -82,8 +82,8 @@ class WorldManager:
         start_x = math.floor(x / self.TILE_SIZE)
         start_y = math.floor(y / self.TILE_SIZE)
         # nemame technologii na for (int i = 0; i <= 1; i++)
-        end_x = start_x + 1 + math.ceil(w / self.TILE_SIZE)
-        end_y = start_y + 1 + math.ceil(h / self.TILE_SIZE)
+        end_x = start_x + 2 + math.floor(w / self.TILE_SIZE)
+        end_y = start_y + 2 + math.floor(h / self.TILE_SIZE)
 
 
         if start_x < 0 or end_x > self.WORLD_WIDTH:

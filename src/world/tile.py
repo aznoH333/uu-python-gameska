@@ -9,10 +9,10 @@ class Tile:
         self.solid = solid
         self.sprite = sprite
 
-    def draw(self, sprite_man, x, y):
+    def draw(self, drawing_man, x, y):
         if not self.is_visible:
             return
-        sprite_man.draw_sprite(self.sprite, x, y, (255, 10, 41))
+        drawing_man.draw_sprite(self.sprite, x, y, (255, 10, 41))
 
     def is_solid(self):
         return self.is_visible and self.solid
