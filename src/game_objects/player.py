@@ -13,6 +13,7 @@ class Player(BaseObject):
     SPEED = 5
     ACCELERATION = 0.1
     GRAVITY = 0.1
+    JUMP_STRENGTH = 3.5
 
     def __init__(self, x, y):
         super().__init__(x, y, 0, 20, 30, -6, 2)
@@ -38,7 +39,7 @@ class Player(BaseObject):
 
         # gravity and on ground stuff
         self.tile_bellow = self.world.collides_with_tile(self.x, self.y + self.ym + 1, self.width, self.height)
-        self.tile_left = self.x + self.xm > 0 and self.world.collides_with_tile(self.x + self.xm - 1, self.y, self.width, self.height, True)
+        self.tile_left = self.x + self.xm > 0 and self.world.collides_with_tile(self.x + self.xm - 1, self.y, self.width, self.height)
         self.tile_right = self.x + self.xm + self.width + (self.width / 2)< self.world.TOTAL_WIDTH and self.world.collides_with_tile(self.x + self.xm + 1, self.y, self.width, self.height)
 
         # horizontal collisions
@@ -67,12 +68,17 @@ class Player(BaseObject):
         if self.engine.is_key_down(pygame.K_DOWN) and self.tile_bellow:
             self.world.damage_tile(self.x, self.y + self.height)
 
-        if self.engine.is_key_down(pygame.K_LEFT) and self.tile_left:
+        if self.engine.is_key_down(pygame.K_LEFT) and self.tile_left and self.tile_bellow:
             self.world.damage_tile(self.x - self.width, self.y + (self.height / 2))
             
-        if self.engine.is_key_down(pygame.K_RIGHT) and self.tile_right:
+        if self.engine.is_key_down(pygame.K_RIGHT) and self.tile_right and self.tile_bellow:
             self.world.damage_tile(self.x + self.width + (self.width / 2), self.y + (self.height / 2))
 
+
+        # jumping
+        if self.tile_bellow and self.engine.is_key_down(pygame.K_UP):
+            self.tile_bellow = False 
+            self.ym = -self.JUMP_STRENGTH
         
         # world progress
         if self.world.convert_to_world_y(self.y) > 200:
