@@ -20,7 +20,7 @@ class Player(BaseObject):
     ACCELERATION = 0.1
     GRAVITY = 0.1
     JUMP_STRENGTH = 3.5
-    MINING_COOLDOWN = 20
+    MINING_COOLDOWN = 15
 
     def __init__(self, x, y):
         super().__init__(x, y, self.RIGHT_SPRITE_INDEX, 20, 20, -6, -10)

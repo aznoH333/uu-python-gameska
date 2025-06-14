@@ -113,13 +113,14 @@ class WorldManager:
             return
         
         tile = self.get_tile_from_world_coord(converted_x, converted_y)
-
+        self.drawing_man.add_screen_shake(3)
 
         tile.deal_damage(mining_power)
 
 
         if not tile.is_stable():
             # TODO particles
-
             tile.set_tile(False, 1)
+            self.drawing_man.add_screen_shake(5)
+
             

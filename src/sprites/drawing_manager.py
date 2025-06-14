@@ -1,6 +1,9 @@
 import math
 import pygame
 
+from engine.engine import Engine
+from engine.utils import gravitate_number
+
 
 class DrawingManager:
 
@@ -24,6 +27,8 @@ class DrawingManager:
         
         self.coloring_surface = pygame.Surface((self.SPRITE_SCALE * self.GAME_ZOOM, self.SPRITE_SCALE * self.GAME_ZOOM))
         self.font = pygame.font.Font('freesansbold.ttf', 32)
+        self.screen_shake = 0
+        self.engine = Engine.get_instance()
 
     """
         Important note.
@@ -45,7 +50,8 @@ class DrawingManager:
         self.coloring_surface.fill(color)
         self.coloring_surface.set_colorkey((0, 0, 0, 0))
         self.coloring_surface.blit(self.sprite_sheet, (0, 0), rect, special_flags=pygame.BLEND_RGBA_MULT)
-        self.screen.blit(self.coloring_surface, (x * self.GAME_ZOOM, y * self.GAME_ZOOM))
+        
+        self.screen.blit(self.coloring_surface, (x * self.GAME_ZOOM, y * self.GAME_ZOOM + (math.sin(self.screen_shake) * (math.sqrt(self.screen_shake + 1)))))
 
 
     def draw_text(self, text, x, y, color=(255, 255, 255)):
@@ -56,7 +62,11 @@ class DrawingManager:
 
     def update_screen(self):
         self.screen.fill((0, 0, 0))
+        self.screen_shake = gravitate_number(self.screen_shake, 0, self.engine.get_delta())
 
     def draw_debug_pixel(self, x, y, color):
         self.coloring_surface.fill(color)
         self.screen.blit(self.coloring_surface, (x * self.GAME_ZOOM, y * self.GAME_ZOOM), (0, 0, self.GAME_ZOOM, self.GAME_ZOOM))
+
+    def add_screen_shake(self, ammount):
+        self.screen_shake += ammount
