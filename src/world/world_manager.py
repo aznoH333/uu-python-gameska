@@ -48,6 +48,7 @@ class WorldManager:
             if self.world_offset > self.sprite_man.SPRITE_SCALE:
                 self.world_offset -= self.sprite_man.SPRITE_SCALE
                 self.shift_world_up()
+                self.fill_tiles(self.WORLD_HEIGHT - 1)
 
 
     def progress_by(self, value):

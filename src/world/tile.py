@@ -13,4 +13,4 @@ class Tile:
     def draw(self, sprite_man, x, y):
         if not self.is_visible:
             return
-        sprite_man.draw_sprite(self.sprite, x, y)
+        sprite_man.draw_sprite(self.sprite, x, y, (255, 10, 41))
