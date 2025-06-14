@@ -76,6 +76,8 @@ class WorldManager:
 
 
     def collides_with_tile(self, x, y, w, h):
+        y = self.convert_to_world_y(y)
+        
         start_x = math.floor(x / self.TILE_SIZE)
         start_y = math.floor(y / self.TILE_SIZE)
         # nemame technologii na for (int i = 0; i <= 1; i++)
@@ -95,3 +97,9 @@ class WorldManager:
                     return True
         
         return False
+    
+    def convert_to_world_y(self, y):
+        return y - self.depth
+    
+    def get_depth(self):
+        return self.depth
