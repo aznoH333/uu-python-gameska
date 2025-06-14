@@ -1,7 +1,7 @@
 import pygame
 
 from engine.engine import Engine
-from game_objects.player import Player
+from game_objects.player.player import Player
 from objects.object_manager import ObjectManager
 from sprites.drawing_manager import DrawingManager
 from world.world_manager import WorldManager

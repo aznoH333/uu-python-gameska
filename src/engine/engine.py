@@ -1,3 +1,4 @@
+import math
 import sys
 import pygame
 clock = pygame.time.Clock()
@@ -12,11 +13,13 @@ class Engine:
         return Engine.instance
     
     def __init__(self):
-        self.game_speed = 60
+        self.game_speed = 660
         self.clock = pygame.time.Clock()
         self.delta = 0
+        self.timer = 0
         self.keys = None
         self.is_game_running = True
+
         pass
 
     def set_game_speed(self, speed):
@@ -36,10 +39,14 @@ class Engine:
 
         # calculate delta
         self.delta = self.clock.tick(self.game_speed) / self.game_speed
+        self.timer += self.delta
 
 
     def get_delta(self):
         return self.delta
+    
+    def get_global_timer(self):
+        return math.floor(self.timer)
     
     def is_key_down(self, key):
         return self.keys[key]

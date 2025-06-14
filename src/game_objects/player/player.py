@@ -1,6 +1,7 @@
 import math
 from engine.engine import Engine
 from engine.utils import gravitate_number, signum
+from game_objects.player.player_direction import PlayerDirection
 from objects.base_object import BaseObject
 import pygame
 from sprites.drawing_manager import DrawingManager
@@ -9,6 +10,10 @@ from world.world_manager import WorldManager
 
 class Player(BaseObject):
     
+    LEFT_SPRITE_INDEX = 18
+    RIGHT_SPRITE_INDEX = 22
+    DOWN_SPRITE_INDEX = 20
+
 
     SPEED = 5
     ACCELERATION = 0.1
@@ -16,7 +21,7 @@ class Player(BaseObject):
     JUMP_STRENGTH = 3.5
 
     def __init__(self, x, y):
-        super().__init__(x, y, 0, 20, 30, -6, 2)
+        super().__init__(x, y, self.RIGHT_SPRITE_INDEX, 20, 30, -6, 2)
         self.engine = Engine.get_instance()
         self.world = WorldManager.get_instance()
         self.drawing_man = DrawingManager.get_instance()
@@ -25,14 +30,17 @@ class Player(BaseObject):
         self.tile_bellow = False
         self.tile_left = False
         self.tile_right = False
+        self.direction = PlayerDirection.RIGHT
 
     def update(self):
 
         # accelerate
         if self.engine.is_key_down(pygame.K_LEFT):
             self.xm = gravitate_number(self.xm, -self.SPEED, self.ACCELERATION)
+            self.direction = PlayerDirection.LEFT
         elif self.engine.is_key_down(pygame.K_RIGHT):
             self.xm = gravitate_number(self.xm, self.SPEED, self.ACCELERATION)
+            self.direction = PlayerDirection.RIGHT
         else:
             self.xm = gravitate_number(self.xm, 0, self.ACCELERATION)
 
@@ -87,6 +95,19 @@ class Player(BaseObject):
         if self.world.convert_to_world_y(self.y) > 200:
             self.world.progress_by(self.world.convert_to_world_y(self.y) - 200)
 
-        self.drawing_man.draw_text(f"{self.tile_bellow}", 30, 30)
+
+
+
+        # update sprite
+        # i am too lazy to implement sprite flipping so this hacky workaround will be good enough
+        match (self.direction):
+            case PlayerDirection.LEFT:
+                self.sprite_index = self.LEFT_SPRITE_INDEX
+            case PlayerDirection.RIGHT:
+                self.sprite_index = self.RIGHT_SPRITE_INDEX
+            case PlayerDirection.DOWN:
+                self.sprite_index = self.DOWN_SPRITE_INDEX
+
+        self.sprite_index += self.engine.get_global_timer() % 20 > 10
 
     
