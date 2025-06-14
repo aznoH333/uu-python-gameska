@@ -1,5 +1,5 @@
 from sprites.drawing_manager import DrawingManager
-from world.world_manager import WorldManager
+from game_logic.world_manager import WorldManager
 
 
 

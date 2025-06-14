@@ -5,7 +5,7 @@ from game_objects.player.player_direction import PlayerDirection
 from objects.base_object import BaseObject
 import pygame
 from sprites.drawing_manager import DrawingManager
-from world.world_manager import WorldManager
+from game_logic.world_manager import WorldManager
 
 
 class Player(BaseObject):

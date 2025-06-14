@@ -2,7 +2,7 @@ import math
 import pygame
 
 from engine.engine import Engine
-from engine.utils import gravitate_number
+from engine.utils import fade_color, gravitate_number
 
 
 class DrawingManager:
@@ -54,11 +54,17 @@ class DrawingManager:
         self.screen.blit(self.coloring_surface, (x * self.GAME_ZOOM, y * self.GAME_ZOOM + (math.sin(self.screen_shake) * (math.sqrt(self.screen_shake + 1)))))
 
 
-    def draw_text(self, text, x, y, color=(255, 255, 255)):
-        text = self.font.render(text, False, color)
-        textRect = text.get_rect()
-        textRect.bottomleft = (x, y)
-        self.screen.blit(text, textRect)
+    def draw_text(self, text_base, x, y, color=(255, 255, 255)):
+        text = self.font.render(text_base, False, color)
+        text_rect = text.get_rect()
+        text_rect.bottomleft = (x, y)
+
+        text_shadow = self.font.render(text_base, False, fade_color(color, 0.25))
+        text_shadow_rect = text_shadow.get_rect()
+        text_shadow_rect.bottomleft = (x + 3, y + 3)
+
+        self.screen.blit(text_shadow, text_shadow_rect)
+        self.screen.blit(text, text_rect)
 
     def update_screen(self):
         self.screen.fill((0, 0, 0))

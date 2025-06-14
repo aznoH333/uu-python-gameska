@@ -2,7 +2,7 @@ import math
 from engine.engine import Engine
 from game_objects.rock_particle import RockParticle
 from sprites.drawing_manager import DrawingManager
-from world.tile import Tile
+from game_logic.tile import Tile
 import random
 
 
@@ -39,7 +39,7 @@ class WorldManager:
             for j in range(0, self.WORLD_WIDTH):
                 self.tiles[i].append(Tile())
 
-        for i in range(8, self.WORLD_HEIGHT):
+        for i in range(6, self.WORLD_HEIGHT):
             self.fill_tiles(i)
 
     def update(self):
