@@ -3,6 +3,7 @@ from engine.engine import Engine
 from engine.utils import gravitate_number, signum
 from objects.base_object import BaseObject
 import pygame
+from sprites.drawing_manager import DrawingManager
 from world.world_manager import WorldManager
 
 
@@ -17,6 +18,7 @@ class Player(BaseObject):
         super().__init__(x, y, 0, 20, 30, -6, 2)
         self.engine = Engine.get_instance()
         self.world = WorldManager.get_instance()
+        self.drawing_man = DrawingManager.get_instance()
         self.xm = 0
         self.ym = 0
         self.tile_bellow = False
@@ -72,5 +74,14 @@ class Player(BaseObject):
         if self.engine.is_key_down(pygame.K_RIGHT) and self.tile_right:
             self.world.damage_tile(self.x + self.width + (self.width / 2), self.y)
 
+
+        
+        # world progress
+        if self.world.convert_to_world_y(self.y) > 180:
+            self.world.progress_by(self.world.convert_to_world_y(self.y) - 180)
+
+
+        #debug
+        self.drawing_man.draw_text(f"{self.y} {self.world.convert_to_world_y(self.y)}", 60, 60)
 
     

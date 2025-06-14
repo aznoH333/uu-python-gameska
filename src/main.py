@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame
 
 from engine.engine import Engine
 from game_objects.player import Player
@@ -25,7 +25,6 @@ while True:
     engine.update()
     drawing_man.update_screen()
     
-    drawing_man.draw_text("beans", 40, 40)
     if engine.is_key_down(pygame.K_SPACE):
         world.progress_by(1)
 
