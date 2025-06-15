@@ -26,6 +26,7 @@ class DrawingManager:
         self.sprite_sheet = pygame.transform.scale(self.sprite_sheet, (self.sprite_sheet_width * self.SPRITE_SCALE * self.GAME_ZOOM, self.sprite_sheet_height * self.SPRITE_SCALE * self.GAME_ZOOM))
         
         self.coloring_surface = pygame.Surface((self.SPRITE_SCALE * self.GAME_ZOOM, self.SPRITE_SCALE * self.GAME_ZOOM))
+        pygame.font.init()
         self.font = pygame.font.Font('freesansbold.ttf', 32)
         self.screen_shake = 0
         self.engine = Engine.get_instance()
@@ -51,6 +52,10 @@ class DrawingManager:
         self.coloring_surface.blit(self.sprite_sheet, (0, 0), rect, special_flags=pygame.BLEND_RGBA_MULT)
         
         self.screen.blit(self.coloring_surface, (x * self.GAME_ZOOM, y * self.GAME_ZOOM + (math.sin(self.screen_shake) * (math.sqrt(self.screen_shake + 1)))))
+
+    def draw_image(self, image, x, y):
+        self.screen.blit(image, (x * self.GAME_ZOOM, y * self.GAME_ZOOM + (math.sin(self.screen_shake) * (math.sqrt(self.screen_shake + 1)))))
+
 
 
     def draw_text(self, text_base, x, y, color=(255, 255, 255)):
