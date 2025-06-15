@@ -7,6 +7,7 @@ from objects.base_object import BaseObject
 import pygame
 from sprites.drawing_manager import DrawingManager
 from game_logic.world_manager import WorldManager
+from game_sounds.sounds_manager import SoundManager
 
 
 class Player(BaseObject):
@@ -37,15 +38,19 @@ class Player(BaseObject):
         self.mining_cooldown = 0
         self.game_stats = GameStats.get_instance()
         self.active_shop = None
+        self.sound_manager = SoundManager.get_instance()
+
 
     def update(self, depth):
         delta = self.engine.get_delta()
         # accelerate
         if self.engine.is_key_down(pygame.K_LEFT) and self.can_move():
+            self.sound_manager["engine"].play().set_volume(0.05)
             self.xm = gravitate_number(self.xm, -self.SPEED, self.ACCELERATION * delta)
             self.direction = PlayerDirection.LEFT
             self.spend_fuel(0.01 * delta)
         elif self.engine.is_key_down(pygame.K_RIGHT) and self.can_move():
+            self.sound_manager["engine"].play().set_volume(0.05)
             self.xm = gravitate_number(self.xm, self.SPEED, self.ACCELERATION * delta)
             self.direction = PlayerDirection.RIGHT
             self.spend_fuel(0.01 * delta)
@@ -64,6 +69,8 @@ class Player(BaseObject):
             self.tile_bellow = False 
             self.ym = -self.JUMP_STRENGTH
             self.spend_fuel(0.02 * delta)
+            self.sound_manager["jump"].play()
+
 
 
 

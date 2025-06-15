@@ -7,6 +7,8 @@ from game_objects.shop.shop import Shop
 from objects.object_manager import ObjectManager
 from sprites.drawing_manager import DrawingManager
 from game_logic.world_manager import WorldManager
+from game_sounds.sounds_manager import SoundManager
+
 
 pygame.init()
 pygame.display.set_caption("Python gameska")
@@ -18,6 +20,8 @@ obj_man = ObjectManager.get_instance()
 engine = Engine.get_instance()
 world = WorldManager.get_instance()
 game_stats = GameStats.get_instance()
+game_sounds = SoundManager.get_instance()
+
 
 # spawn player
 obj_man.add_object(Player(0, 0))
