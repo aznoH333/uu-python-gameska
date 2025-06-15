@@ -20,7 +20,7 @@ class SoundManager:
         self.sounds = {}
 
         for file in SOUNDS_DIR.iterdir():
-            if file.suffix.lower() in [".wav", ".mp3"]:
+            if file.suffix.lower() in [".wav", ".mp3", ".ogg"]:
                 sound_name = file.stem  # filename without extension
                 self.sounds[sound_name] = pygame.mixer.Sound(str(file))
                 #print(f"Loading: {file.name}")
