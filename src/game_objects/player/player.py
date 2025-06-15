@@ -3,6 +3,7 @@ from engine.engine import Engine
 from engine.utils import gravitate_number, signum
 from game_logic.game_stats import GameStats
 from game_objects.player.player_direction import PlayerDirection
+from game_objects.shop.shop import Shop
 from objects.base_object import BaseObject
 import pygame
 from sprites.drawing_manager import DrawingManager
@@ -81,7 +82,7 @@ class Player(BaseObject):
 
 
         # unstuck player
-        if self.world.collides_with_tile(self.x, self.y, self.width, self.height):
+        if self.world.collides_with_tile(self.x + 3, self.y + 6, self.width - 6, self.height - 6):
             self.y -= 1
 
 
@@ -140,3 +141,7 @@ class Player(BaseObject):
 
     def reset_mining_cooldown(self):
         self.mining_cooldown = self.MINING_COOLDOWN # TODO upgrades
+
+    def on_collide(self, other):
+        if isinstance(other, Shop):
+            print("wahoo")

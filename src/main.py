@@ -3,6 +3,7 @@ import pygame
 from engine.engine import Engine
 from game_logic.game_stats import GameStats
 from game_objects.player.player import Player
+from game_objects.shop.shop import Shop
 from objects.object_manager import ObjectManager
 from sprites.drawing_manager import DrawingManager
 from game_logic.world_manager import WorldManager
@@ -20,6 +21,7 @@ game_stats = GameStats.get_instance()
 
 # spawn player
 obj_man.add_object(Player(0, 0))
+obj_man.add_object(Shop(64, 160))
 
 
 

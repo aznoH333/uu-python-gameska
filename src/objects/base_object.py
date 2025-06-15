@@ -16,3 +16,6 @@ class BaseObject:
     def update(self, depth):
         print("undefine update")
 
+
+    def on_collide(self, other):
+        pass
