@@ -89,7 +89,7 @@ class Tile:
 
         if self.ore.rarity < 0.2:
             color = (80, 244, 255)
-        elif self.ore.rarity < 0.6:
+        elif self.ore.rarity < 0.4:
             color = (255, 245, 54)
 
         return (f"{self.ore.value}$", color)

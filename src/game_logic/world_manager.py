@@ -193,7 +193,7 @@ class WorldManager:
         sprite = random.randint(3, 9)
         color = pick_random_color()
         rarity = random.uniform(0.1, 0.9)
-        value = math.floor((200 + ((1 - rarity) * 200)) + (100 * self.depth * 0.3)) * 10
+        value = math.floor((200 + (math.pow(1 - rarity, 2) * 600)) + (100 * self.depth * 0.3)) * 10
         
         ore.set_ore(sprite, color, value, 1 + (1-rarity), True, False, rarity)
         self.active_ores.append(ore)
