@@ -14,7 +14,7 @@ class GameStats:
         self.money = 0
         self.depth = 0
         self.drawing_man = DrawingManager.get_instance()
-        self.fuel = 50
+        self.fuel = 1
         self.max_fuel = 50
         self.fuel_efficiency = 1
         self.mining_power = 10
@@ -23,12 +23,16 @@ class GameStats:
         pass
 
     def update(self):
+        if not self.game_over:
+            self.drawing_man.draw_text(f"Hloubka {round(self.depth / 6.4)}m", 30, 42)
+            self.drawing_man.draw_text(f"Prachy {self.money}$", 30, 74, (240, 200, 7))
+            self.drawing_man.draw_text(f"Palivo {math.ceil(self.fuel)} / {self.max_fuel}L", 30, 106, (173, 0, 255))
+            if self.fuel == 0:
+                self.game_over = True
+        else:
+            self.drawing_man.draw_text(f"Konec gamesky :(", 240, 180)
+            self.drawing_man.draw_text(f"Došlo ti palivo", 250, 216)
 
-        self.drawing_man.draw_text(f"Hloubka {round(self.depth / 6.4)}m", 30, 42)
-        self.drawing_man.draw_text(f"Prachy {self.money}$", 30, 74, (240, 200, 7))
-        self.drawing_man.draw_text(f"Palivo {math.ceil(self.fuel)} / {self.max_fuel}L", 30, 106, (173, 0, 255))
-        if self.fuel == 0:
-            self.game_over = True
 
     def add_money(self, ammount):
         self.money += ammount
