@@ -83,7 +83,7 @@ class Shop(BaseObject):
 
 
     def generate_random_item(self, depth):
-        price = math.floor((500) + (depth)) * random.randint(20, 25)
+        price = math.floor((500) + (depth)) * random.randint(10, 12)
 
         index = random.randint(2, 4)
         type = ShopItemType(index)
@@ -103,7 +103,15 @@ class Shop(BaseObject):
         self.items.append(ShopItem(text, math.floor(price), type))
 
     def pick_upgrade(self, index):
+        
+        
         upgrade = self.items[index]
+        
+        if upgrade.price >= self.stats.money:
+            return
+        
+        self.stats.money -= upgrade.price
+        
         match(upgrade.type):
             case ShopItemType.EXIT:
                 self.open = False

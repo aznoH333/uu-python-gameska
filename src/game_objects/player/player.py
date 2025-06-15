@@ -69,7 +69,7 @@ class Player(BaseObject):
             self.tile_bellow = False 
             self.ym = -self.JUMP_STRENGTH
             self.spend_fuel(0.02 * delta)
-            self.sound_manager["jump"].play()
+            self.sound_manager["jump"].play().set_volume(0.75)
 
 
 

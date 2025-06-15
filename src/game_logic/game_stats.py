@@ -14,7 +14,7 @@ class GameStats:
         self.money = 0
         self.depth = 0
         self.drawing_man = DrawingManager.get_instance()
-        self.fuel = 1
+        self.fuel = 50
         self.max_fuel = 50
         self.fuel_efficiency = 1
         self.mining_power = 10

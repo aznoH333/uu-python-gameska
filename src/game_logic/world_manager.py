@@ -7,6 +7,7 @@ from game_logic.world_stats import WorldStats
 from game_objects.rock_particle import RockParticle
 from game_objects.shop.shop import Shop
 from game_objects.value_particle import ValueParticle
+from game_sounds.sounds_manager import SoundManager
 from sprites.drawing_manager import DrawingManager
 from game_logic.tile import Tile
 import random
@@ -42,6 +43,7 @@ class WorldManager:
         self.obj_man = None
         self.next_shop = self.DISTANCE_BETWEEN_SHOPS
         self.game_stats = GameStats.get_instance()
+        self.sound_man = SoundManager.get_instance()
 
         # init colors
         self.current_color = WorldStats(0)
@@ -183,6 +185,10 @@ class WorldManager:
         # damage tile
         self.drawing_man.add_screen_shake(3)
         tile.deal_damage(mining_power)
+        if tile.ore.exists:
+            self.sound_man["oreMine"].play().set_volume(0.5)
+        else:
+            self.sound_man["mine"].play().set_volume(0.5)
 
         particle_x = round(x / self.TILE_SIZE) * self.TILE_SIZE + (self.TILE_SIZE / 2)
         particle_y = round(y / self.TILE_SIZE) * self.TILE_SIZE + (self.TILE_SIZE / 2)
@@ -190,6 +196,8 @@ class WorldManager:
             self.obj_man.add_object(RockParticle(particle_x + random.randint(-6, 6), particle_y + random.randint(-6, 6), tile.get_particle_color()))
         # kill tile
         if not tile.is_stable():
+            self.sound_man["break"].play().set_volume(0.5)
+            
             for _ in range(0, random.randint(6, 8)):
                 self.obj_man.add_object(RockParticle(particle_x + random.randint(-6, 6), particle_y + random.randint(-6, 6), tile.get_particle_color()))
             self.drawing_man.add_screen_shake(5)
