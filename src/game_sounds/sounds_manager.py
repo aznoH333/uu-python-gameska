@@ -24,7 +24,6 @@ class SoundManager:
                 sound_name = file.stem  # filename without extension
                 self.sounds[sound_name] = pygame.mixer.Sound(str(file))
                 #print(f"Loading: {file.name}")
-        self.sounds["music"].play(-1).set_volume(0.7)
 
 
     def __getitem__(self, key):
