@@ -1,3 +1,5 @@
+import math
+import random
 import pygame
 from engine.engine import Engine
 from game_logic.game_stats import GameStats
@@ -10,7 +12,7 @@ from sprites.drawing_manager import DrawingManager
 class Shop(BaseObject):
     INTERACTION_COOLDOWN = 10
     
-    def __init__(self, x, y):
+    def __init__(self, x, y, depth):
         super().__init__(x, y, 27, 32, 32, 0, 0)
         self.active = True
         self.open = False
@@ -25,7 +27,7 @@ class Shop(BaseObject):
         self.interaction_cooldown = 30
         # generate items
         for i in range(0, 2):
-            self.generate_random_item()
+            self.generate_random_item(depth)
 
 
         
@@ -80,20 +82,40 @@ class Shop(BaseObject):
             
 
 
-    def generate_random_item(self):
-        self.items.append(ShopItem("Rychlost těžení", 200, ShopItemType.DRILL_UPGRADE)) # TODO : more upgrades
+    def generate_random_item(self, depth):
+        price = math.floor((200 + (math.pow(1.5 - 0.5, 2) * 600)) + (depth)) * random.randint(45, 55)
+
+        index = random.randint(2, 4)
+        type = ShopItemType(index)
+        text = ""
+
+        match (type):
+            case ShopItemType.DRILL_UPGRADE:
+                price *= 1.2
+                text = "Rychlost těžení"
+            case ShopItemType.FUEL_CAPACITY:
+                price *= 0.7
+                text = "Kapacita paliva"
+            case ShopItemType.FUEL_EFFICIENCY:
+                text = "Effektivita motoru"
+
+
+        self.items.append(ShopItem(text, math.floor(price), type))
 
     def pick_upgrade(self, index):
         upgrade = self.items[index]
         match(upgrade.type):
             case ShopItemType.EXIT:
-                print("leavuju")
                 self.open = False
                 self.active = False
             case ShopItemType.FUEL:
                 self.stats.add_fuel(999999999)
             case ShopItemType.DRILL_UPGRADE:
-                print("TODO this")
+                self.stats.mining_power += 10
+            case ShopItemType.FUEL_CAPACITY:
+                self.stats.max_fuel += 10
+            case ShopItemType.FUEL_EFFICIENCY:
+                self.stats.fuel_efficiency += 1
         
         del self.items[index]
 

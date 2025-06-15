@@ -18,6 +18,8 @@ class GameStats:
         self.fuel = 50
         self.fuel_max = 50
         self.fuel_efficiency = 1
+        self.mining_power = 10
+
         
         pass
 

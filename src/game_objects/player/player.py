@@ -34,7 +34,6 @@ class Player(BaseObject):
         self.tile_left = False
         self.tile_right = False
         self.direction = PlayerDirection.RIGHT
-        self.mining_power = 10 # TODO : mining power upgrades
         self.mining_cooldown = 0
         self.game_stats = GameStats.get_instance()
         self.active_shop = None
@@ -96,19 +95,19 @@ class Player(BaseObject):
             mining_result = (0, False)
             
             if self.engine.is_key_down(pygame.K_DOWN) and self.tile_bellow:
-                mining_result = self.world.damage_tile(self.x, self.y + self.height, self.mining_power)
+                mining_result = self.world.damage_tile(self.x, self.y + self.height, self.game_stats.mining_power)
                 self.direction = PlayerDirection.DOWN
                 self.spend_fuel(0.1 * delta)
                 self.reset_mining_cooldown()
 
             if self.engine.is_key_down(pygame.K_LEFT) and self.tile_left and self.tile_bellow:
-                mining_result = self.world.damage_tile(self.x - self.width, self.y, self.mining_power)
+                mining_result = self.world.damage_tile(self.x - self.width, self.y, self.game_stats.mining_power)
                 self.spend_fuel(0.1 * delta)
                 self.reset_mining_cooldown()
 
                 
             if self.engine.is_key_down(pygame.K_RIGHT) and self.tile_right and self.tile_bellow:
-                mining_result = self.world.damage_tile(self.x + self.width + (self.width / 2), self.y, self.mining_power)
+                mining_result = self.world.damage_tile(self.x + self.width + (self.width / 2), self.y, self.game_stats.mining_power)
                 self.spend_fuel(0.1 * delta)
                 self.reset_mining_cooldown()
             if mining_result[1]:
