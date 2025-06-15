@@ -28,9 +28,6 @@ obj_man.add_object(Shop(64, 160))
 while True:
     engine.update()
     drawing_man.update_screen()
-    
-    if engine.is_key_down(pygame.K_SPACE):
-        world.progress_by(1)
 
     world.update()
     obj_man.update()

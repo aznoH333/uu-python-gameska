@@ -24,8 +24,8 @@ class GameStats:
     def update(self):
 
         self.drawing_man.draw_text(f"Hloubka {round(self.world_man.get_depth() / 6.4)}m", 30, 42)
-        self.drawing_man.draw_text(f"Prachy {self.money}$", 30, 74, (213, 171, 7))
-        self.drawing_man.draw_text(f"Palivo {math.ceil(self.fuel)} / {self.fuel_max}", 30, 106)
+        self.drawing_man.draw_text(f"Prachy {self.money}$", 30, 74, (240, 200, 7))
+        self.drawing_man.draw_text(f"Palivo {math.ceil(self.fuel)} / {self.fuel_max}L", 30, 106, (173, 0, 255))
 
     def add_money(self, ammount):
         self.money += ammount

@@ -46,7 +46,7 @@ class WorldManager:
 
         #init ores
         self.coal_ore = Ore()
-        self.coal_ore.set_ore(10, (0,0,0), 5, 1.1, True, True, 0.3)
+        self.coal_ore.set_ore(10, (0,0,0), 8, 1.1, True, True, 0.3)
 
         self.active_ores = []
         for i in range(0, 2):
