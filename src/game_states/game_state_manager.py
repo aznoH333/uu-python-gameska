@@ -53,7 +53,22 @@ class GameStateManager:
         self.game_stats.update()
 
     def main_menu(self):
-        pass
+        self.timer += self.engine.get_delta() * 2
+        alpha = min(self.timer, 255)
+        self.drawing_man.draw_text("Video hra", 270, 100, (alpha, alpha, alpha, alpha))
+        self.button("Start", 290, 180, alpha)
+        self.button("log(0)", 290, 210, alpha)
+        """
+            Jakub Tesař (7054-6495-1)
+    Lukáš Nový (4439-6070-1)
+    Do Ngoc Linh (216-1914-1)
+    Jan Laššák (3753-7875-1)
+    Eva Masáková (9939-5890-1)
+        """
+        self.drawing_man.draw_text("Ovládání: Šipky", 30, 300, (alpha, alpha, alpha, alpha))
+
+        self.drawing_man.draw_text("Autoři: Jan Laššák, Jakub Tesař, Lukáš Nový, Eva Masáková, Do Ngoc Linh", 30, 340, (alpha, alpha, alpha, alpha))
+
 
     def opening_screen(self):
         self.timer -= self.engine.get_delta()
@@ -66,3 +81,7 @@ class GameStateManager:
         if self.timer <= 0:
             self.state = GameState.MAIN_MENU
             self.sound_manager["music"].play(-1).set_volume(1)
+            self.timer = 0
+
+    def button(self, text, x, y, alpha):
+        self.drawing_man.draw_text(text, x, y, (alpha, alpha, alpha, alpha))
