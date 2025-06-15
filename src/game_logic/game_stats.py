@@ -18,7 +18,7 @@ class GameStats:
         self.max_fuel = 50
         self.fuel_efficiency = 1
         self.mining_power = 10
-
+        self.game_over = False
         
         pass
 
@@ -27,6 +27,8 @@ class GameStats:
         self.drawing_man.draw_text(f"Hloubka {round(self.depth / 6.4)}m", 30, 42)
         self.drawing_man.draw_text(f"Prachy {self.money}$", 30, 74, (240, 200, 7))
         self.drawing_man.draw_text(f"Palivo {math.ceil(self.fuel)} / {self.max_fuel}L", 30, 106, (173, 0, 255))
+        if self.fuel == 0:
+            self.game_over = True
 
     def add_money(self, ammount):
         self.money += ammount

@@ -154,7 +154,7 @@ class Player(BaseObject):
             self.active_shop = other
 
     def can_move(self):
-        return self.active_shop == None or not self.active_shop.open
+        return (self.active_shop == None or not self.active_shop.open) and self.game_stats.game_over == False
     
     def spend_fuel(self, ammount):
         self.game_stats.add_fuel(-ammount * self.game_stats.get_fuel_efficiency())
