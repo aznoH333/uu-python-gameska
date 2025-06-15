@@ -33,7 +33,7 @@ class Player(BaseObject):
         self.tile_left = False
         self.tile_right = False
         self.direction = PlayerDirection.RIGHT
-        self.mining_power = 10 # TODO : mining power upgrades
+        self.mining_power = 20 # TODO : mining power upgrades
         self.mining_cooldown = 0
 
     def update(self):

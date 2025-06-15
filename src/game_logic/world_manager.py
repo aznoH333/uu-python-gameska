@@ -1,5 +1,7 @@
 import math
 from engine.engine import Engine
+from engine.utils import interpolate, interpolate_color
+from game_logic.world_stats import WorldStats
 from game_objects.rock_particle import RockParticle
 from sprites.drawing_manager import DrawingManager
 from game_logic.tile import Tile
@@ -10,6 +12,7 @@ class WorldManager:
     instance = None
 
     TILE_SIZE = 32
+    DISTANCE_BETWEEN_COLOR_CHANGES = 320
 
     def get_instance():
         if WorldManager.instance == None:
@@ -33,6 +36,10 @@ class WorldManager:
         self.engine = Engine.get_instance()
         self.obj_man = None
 
+        # init colors
+        self.current_color = WorldStats(0)
+        self.next_color = WorldStats(self.DISTANCE_BETWEEN_COLOR_CHANGES)
+
         # prefill with tiles
         for i in range(0, self.WORLD_HEIGHT):
             self.tiles.append([])
@@ -41,6 +48,8 @@ class WorldManager:
 
         for i in range(6, self.WORLD_HEIGHT):
             self.fill_tiles(i)
+
+        
 
     def update(self):
         # draw tiles
@@ -58,14 +67,23 @@ class WorldManager:
                 self.shift_world_up()
                 self.fill_tiles(self.WORLD_HEIGHT - 1)
 
+        # progress world stats
+        if self.next_color.has_reached(self.depth):
+            self.current_color = self.next_color
+            self.next_color = WorldStats(self.depth + self.DISTANCE_BETWEEN_COLOR_CHANGES)
+
 
     def progress_by(self, value):
         self.progress_to = self.depth + value
 
     def fill_tiles(self, y):
+        
+        progress = (self.depth - self.current_color.get_start_depth()) / (self.next_color.get_start_depth() - self.current_color.get_start_depth())
+        color = interpolate_color(self.current_color.color, self.next_color.color, progress)
+        toughness = interpolate(self.current_color.toughness, self.next_color.toughness, progress)
         for x in range(0, self.WORLD_WIDTH):
             tile = self.tiles[y][x]
-            tile.set_tile(True, 0, (170, 170, 255), 50)
+            tile.set_tile(True, 0, color, toughness)
 
     def shift_world_up(self):
         temp = self.tiles[0]
