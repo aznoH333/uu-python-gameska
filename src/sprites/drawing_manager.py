@@ -46,7 +46,6 @@ class DrawingManager:
                 self.SPRITE_SCALE * self.GAME_ZOOM                                                      #h
                 )
         
-
         self.coloring_surface.fill(color)
         self.coloring_surface.set_colorkey((0, 0, 0, 0))
         self.coloring_surface.blit(self.sprite_sheet, (0, 0), rect, special_flags=pygame.BLEND_RGBA_MULT)
@@ -55,6 +54,8 @@ class DrawingManager:
 
 
     def draw_text(self, text_base, x, y, color=(255, 255, 255)):
+        x*=self.GAME_ZOOM
+        y*=self.GAME_ZOOM
         text = self.font.render(text_base, False, color)
         text_rect = text.get_rect()
         text_rect.bottomleft = (x, y)

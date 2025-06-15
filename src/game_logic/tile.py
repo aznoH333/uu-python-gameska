@@ -76,3 +76,20 @@ class Tile:
     
     def is_coal(self):
         return self.ore.exists and self.ore.is_coal
+    
+    def get_mine_text(self):
+        
+        if not self.ore.exists:
+            return None
+        elif self.ore.is_coal:
+            return (f"{self.ore.value}L", (89, 11, 117))
+        
+
+        color = (255, 151, 16)
+
+        if self.ore.rarity < 0.2:
+            color = (80, 244, 255)
+        elif self.ore.rarity < 0.6:
+            color = (255, 245, 54)
+
+        return (f"{self.ore.value}$", color)

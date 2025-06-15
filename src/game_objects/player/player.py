@@ -38,7 +38,7 @@ class Player(BaseObject):
         self.mining_cooldown = 0
         self.game_stats = GameStats.get_instance()
 
-    def update(self):
+    def update(self, depth):
         delta = self.engine.get_delta()
         # accelerate
         if self.engine.is_key_down(pygame.K_LEFT):

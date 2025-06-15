@@ -30,7 +30,7 @@ class RockParticle(BaseObject):
         self.engine = Engine.get_instance()
 
 
-    def update(self):
+    def update(self, depth):
         # update position
         self.ym += self.GRAVITY * self.engine.get_delta()
         self.x += self.xm * self.engine.get_delta()

@@ -13,6 +13,6 @@ class BaseObject:
 
 
 
-    def update():
+    def update(self, depth):
         print("undefine update")
 

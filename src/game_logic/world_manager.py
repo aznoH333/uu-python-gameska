@@ -4,6 +4,7 @@ from engine.utils import interpolate, interpolate_color, pick_random_color
 from game_logic.ore import Ore
 from game_logic.world_stats import WorldStats
 from game_objects.rock_particle import RockParticle
+from game_objects.value_particle import ValueParticle
 from sprites.drawing_manager import DrawingManager
 from game_logic.tile import Tile
 import random
@@ -176,6 +177,11 @@ class WorldManager:
             for _ in range(0, random.randint(6, 8)):
                 self.obj_man.add_object(RockParticle(particle_x + random.randint(-6, 6), particle_y + random.randint(-6, 6), tile.get_particle_color()))
             self.drawing_man.add_screen_shake(5)
+            value_text = tile.get_mine_text()
+
+            if value_text != None:
+                self.obj_man.add_object(ValueParticle(particle_x, particle_y, value_text[1], value_text[0]))
+            
             is_coal = tile.is_coal()
             return (int(math.floor(tile.break_tile())), is_coal)
         return (0, False)
@@ -187,7 +193,7 @@ class WorldManager:
         sprite = random.randint(3, 9)
         color = pick_random_color()
         rarity = random.uniform(0.1, 0.9)
-        value = (200 + ((1 - rarity) * 200)) + (100 * self.depth * 0.3) * 10
+        value = math.floor((200 + ((1 - rarity) * 200)) + (100 * self.depth * 0.3)) * 10
         
         ore.set_ore(sprite, color, value, 1 + (1-rarity), True, False, rarity)
         self.active_ores.append(ore)

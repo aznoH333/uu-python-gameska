@@ -23,7 +23,7 @@ class ObjectManager:
     def update(self):
         for object in self.objects:
             #update
-            object.update()
+            object.update(self.world.get_depth())
             #draw
             self.drawing_man.draw_sprite(object.sprite_index, object.x + object.x_offset, object.y + object.y_offset - self.world.get_depth(), object.color)
         
