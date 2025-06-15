@@ -229,8 +229,12 @@ class WorldManager:
         if random.uniform(0, 1) < self.coal_ore.rarity: # generate coal
             return self.coal_ore
         
+
+        chance = random.uniform(0, len(self.active_ores) - 1)
+        cumulative_rarity = 0
         for ore in self.active_ores:
-            if random.uniform(0, 1) < ore.rarity:
+            cumulative_rarity += ore.rarity
+            if chance < cumulative_rarity:
                 return ore
             
         return None
