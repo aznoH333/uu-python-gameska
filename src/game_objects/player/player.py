@@ -7,6 +7,7 @@ from objects.base_object import BaseObject
 import pygame
 from sprites.drawing_manager import DrawingManager
 from game_logic.world_manager import WorldManager
+from game_sounds.sounds_manager import SoundManager
 
 
 class Player(BaseObject):
@@ -38,15 +39,19 @@ class Player(BaseObject):
         self.mining_cooldown = 0
         self.game_stats = GameStats.get_instance()
         self.active_shop = None
+        self.sound_manager = SoundManager.get_instance()
+
 
     def update(self, depth):
         delta = self.engine.get_delta()
         # accelerate
         if self.engine.is_key_down(pygame.K_LEFT) and self.can_move():
+            self.sound_manager["engine"].play().set_volume(0.05)
             self.xm = gravitate_number(self.xm, -self.SPEED, self.ACCELERATION * delta)
             self.direction = PlayerDirection.LEFT
             self.spend_fuel(0.01 * delta)
         elif self.engine.is_key_down(pygame.K_RIGHT) and self.can_move():
+            self.sound_manager["engine"].play().set_volume(0.05)
             self.xm = gravitate_number(self.xm, self.SPEED, self.ACCELERATION * delta)
             self.direction = PlayerDirection.RIGHT
             self.spend_fuel(0.01 * delta)
@@ -65,6 +70,8 @@ class Player(BaseObject):
             self.tile_bellow = False 
             self.ym = -self.JUMP_STRENGTH
             self.spend_fuel(0.02 * delta)
+            self.sound_manager["jump"].play()
+
 
 
 
@@ -97,18 +104,24 @@ class Player(BaseObject):
             
             if self.engine.is_key_down(pygame.K_DOWN) and self.tile_bellow:
                 mining_result = self.world.damage_tile(self.x, self.y + self.height, self.mining_power)
+                self.sound_manager["mine"].play()
+
                 self.direction = PlayerDirection.DOWN
                 self.spend_fuel(0.1 * delta)
                 self.reset_mining_cooldown()
 
             if self.engine.is_key_down(pygame.K_LEFT) and self.tile_left and self.tile_bellow:
                 mining_result = self.world.damage_tile(self.x - self.width, self.y, self.mining_power)
+                self.sound_manager["mine"].play()
+
                 self.spend_fuel(0.1 * delta)
                 self.reset_mining_cooldown()
 
                 
             if self.engine.is_key_down(pygame.K_RIGHT) and self.tile_right and self.tile_bellow:
                 mining_result = self.world.damage_tile(self.x + self.width + (self.width / 2), self.y, self.mining_power)
+                self.sound_manager["mine"].play()
+
                 self.spend_fuel(0.1 * delta)
                 self.reset_mining_cooldown()
             if mining_result[1]:
