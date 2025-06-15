@@ -97,7 +97,7 @@ class WorldManager:
 
             if len(self.active_ores) > 6:
                 for i in range(0, 3):
-                    index = random.randint(0, len(self.active_ores))
+                    index = random.randint(0, len(self.active_ores) - 1)
                     del self.active_ores[index]
 
 

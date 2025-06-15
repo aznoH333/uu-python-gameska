@@ -45,12 +45,10 @@ class Player(BaseObject):
         delta = self.engine.get_delta()
         # accelerate
         if self.engine.is_key_down(pygame.K_LEFT) and self.can_move():
-            self.sound_manager["engine"].play().set_volume(0.05)
             self.xm = gravitate_number(self.xm, -self.SPEED, self.ACCELERATION * delta)
             self.direction = PlayerDirection.LEFT
             self.spend_fuel(0.01 * delta)
         elif self.engine.is_key_down(pygame.K_RIGHT) and self.can_move():
-            self.sound_manager["engine"].play().set_volume(0.05)
             self.xm = gravitate_number(self.xm, self.SPEED, self.ACCELERATION * delta)
             self.direction = PlayerDirection.RIGHT
             self.spend_fuel(0.01 * delta)

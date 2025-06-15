@@ -3,7 +3,7 @@ import pygame
 from pygame import mixer
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parents[2]
+BASE_DIR = Path("./")
 SOUNDS_DIR = BASE_DIR / "sounds"
 
 class SoundManager:
