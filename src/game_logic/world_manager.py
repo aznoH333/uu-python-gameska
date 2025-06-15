@@ -12,7 +12,7 @@ class WorldManager:
     instance = None
 
     TILE_SIZE = 32
-    DISTANCE_BETWEEN_COLOR_CHANGES = 320
+    DISTANCE_BETWEEN_COLOR_CHANGES = 640
 
     def get_instance():
         if WorldManager.instance == None:
@@ -38,6 +38,7 @@ class WorldManager:
 
         # init colors
         self.current_color = WorldStats(0)
+        self.current_color.color = (126, 240, 128)
         self.next_color = WorldStats(self.DISTANCE_BETWEEN_COLOR_CHANGES)
 
         # prefill with tiles
