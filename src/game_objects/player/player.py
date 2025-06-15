@@ -103,11 +103,10 @@ class Player(BaseObject):
             if self.engine.is_key_down(pygame.K_RIGHT) and self.tile_right and self.tile_bellow:
                 mining_result = self.world.damage_tile(self.x + self.width + (self.width / 2), self.y, self.mining_power)
                 self.reset_mining_cooldown()
-            print(f"{mining_result}")
             if mining_result[1]:
                 self.game_stats.add_fuel(mining_result[0])
             else:
-                self.game_stats.add_money(mining_result[1])
+                self.game_stats.add_money(mining_result[0])
         else:
             self.mining_cooldown -= delta
 
