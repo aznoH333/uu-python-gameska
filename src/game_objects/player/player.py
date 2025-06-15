@@ -38,14 +38,15 @@ class Player(BaseObject):
         self.mining_power = 10 # TODO : mining power upgrades
         self.mining_cooldown = 0
         self.game_stats = GameStats.get_instance()
+        self.active_shop = None
 
     def update(self, depth):
         delta = self.engine.get_delta()
         # accelerate
-        if self.engine.is_key_down(pygame.K_LEFT):
+        if self.engine.is_key_down(pygame.K_LEFT) and self.can_move():
             self.xm = gravitate_number(self.xm, -self.SPEED, self.ACCELERATION * delta)
             self.direction = PlayerDirection.LEFT
-        elif self.engine.is_key_down(pygame.K_RIGHT):
+        elif self.engine.is_key_down(pygame.K_RIGHT) and self.can_move():
             self.xm = gravitate_number(self.xm, self.SPEED, self.ACCELERATION * delta)
             self.direction = PlayerDirection.RIGHT
         else:
@@ -58,7 +59,7 @@ class Player(BaseObject):
         self.tile_right = self.x + self.xm + self.width + (self.width / 2)< self.world.TOTAL_WIDTH and self.world.collides_with_tile(self.x + self.xm + 1, self.y, self.width, self.height)
 
         # jumping
-        if self.tile_bellow and self.engine.is_key_down(pygame.K_UP):
+        if self.tile_bellow and self.engine.is_key_down(pygame.K_UP) and self.can_move():
             self.tile_bellow = False 
             self.ym = -self.JUMP_STRENGTH
 
@@ -87,8 +88,7 @@ class Player(BaseObject):
 
 
         #mining
-
-        if self.mining_cooldown <= 0:
+        if self.mining_cooldown <= 0 and self.can_move() and self.xm == 0:
             mining_result = (0, False)
             
             if self.engine.is_key_down(pygame.K_DOWN) and self.tile_bellow:
@@ -144,4 +144,8 @@ class Player(BaseObject):
 
     def on_collide(self, other):
         if isinstance(other, Shop):
-            print("wahoo")
+            other.interact()
+            self.active_shop = other
+
+    def can_move(self):
+        return self.active_shop == None or not self.active_shop.open

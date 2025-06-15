@@ -24,12 +24,13 @@ class ObjectManager:
     def update(self):
         for i in range(0, len(self.objects)):
             object = self.objects[i]
-            #update
-            object.update(self.world.get_depth())
-
+            
             #draw
             self.drawing_man.draw_sprite(object.sprite_index, object.x + object.x_offset, object.y + object.y_offset - self.world.get_depth(), object.color)
         
+            #update
+            object.update(self.world.get_depth())
+
             # collisions
             for j in range(0, len(self.objects)):
                 other = self.objects[j]

@@ -2,6 +2,7 @@ from game_logic.game_stats import GameStats
 from game_objects.shop.shop_item import ShopItem
 from game_objects.shop.shop_item_type import ShopItemType
 from objects.base_object import BaseObject
+from sprites.drawing_manager import DrawingManager
 
 
 class Shop(BaseObject):
@@ -15,7 +16,7 @@ class Shop(BaseObject):
         self.stats = GameStats.get_instance()
         self.items.append(ShopItem("Odejít", 0, ShopItemType.EXIT))
         self.items.append(ShopItem("Palivo", 200, ShopItemType.FUEL))
-        self.drawing_man = GameStats.get_instance()
+        self.drawing_man = DrawingManager.get_instance()
         # generate items
         for i in range(0, 2):
             self.generate_random_item()
@@ -60,3 +61,5 @@ class Shop(BaseObject):
         del self.items[index]
 
 
+    def interact(self):
+        self.open = True
