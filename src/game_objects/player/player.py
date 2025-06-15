@@ -1,4 +1,3 @@
-import math
 from engine.engine import Engine
 from engine.utils import gravitate_number, signum
 from game_logic.game_stats import GameStats
@@ -88,7 +87,7 @@ class Player(BaseObject):
 
 
         #mining
-        if self.mining_cooldown <= 0 and self.can_move() and self.xm == 0:
+        if self.mining_cooldown <= 0 and self.can_move() and abs(self.xm) < 1:
             mining_result = (0, False)
             
             if self.engine.is_key_down(pygame.K_DOWN) and self.tile_bellow:
@@ -143,7 +142,7 @@ class Player(BaseObject):
         self.mining_cooldown = self.MINING_COOLDOWN # TODO upgrades
 
     def on_collide(self, other):
-        if isinstance(other, Shop):
+        if isinstance(other, Shop) and other.active == True:
             other.interact()
             self.active_shop = other
 
