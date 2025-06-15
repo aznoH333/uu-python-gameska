@@ -1,6 +1,7 @@
 import math
 from engine.engine import Engine
-from engine.utils import interpolate, interpolate_color
+from engine.utils import interpolate, interpolate_color, pick_random_color
+from game_logic.ore import Ore
 from game_logic.world_stats import WorldStats
 from game_objects.rock_particle import RockParticle
 from sprites.drawing_manager import DrawingManager
@@ -41,6 +42,16 @@ class WorldManager:
         self.current_color.color = (126, 240, 128)
         self.next_color = WorldStats(self.DISTANCE_BETWEEN_COLOR_CHANGES)
 
+
+        #init ores
+        self.coal_ore = Ore()
+        self.coal_ore.set_ore(10, (0,0,0), 10, 1.1, True, True, 0.3)
+
+        self.active_ores = []
+        for i in range(0, 2):
+            self.generate_ore()
+
+
         # prefill with tiles
         for i in range(0, self.WORLD_HEIGHT):
             self.tiles.append([])
@@ -72,6 +83,12 @@ class WorldManager:
         if self.next_color.has_reached(self.depth):
             self.current_color = self.next_color
             self.next_color = WorldStats(self.depth + self.DISTANCE_BETWEEN_COLOR_CHANGES)
+            self.generate_ore()
+
+            if len(self.active_ores) > 6:
+                for i in range(0, 3):
+                    index = random.randint(0, len(self.active_ores))
+                    del self.active_ores[index]
 
 
     def progress_by(self, value):
@@ -85,6 +102,13 @@ class WorldManager:
         for x in range(0, self.WORLD_WIDTH):
             tile = self.tiles[y][x]
             tile.set_tile(True, 0, color, toughness)
+
+            ore = self.try_generating_ore_for_tile()
+
+            if ore != None:
+                tile.set_ore(ore.sprite, ore.color, ore.value, ore.toughness_multiplier, ore.exists, ore.is_coal, ore.rarity)
+            else:
+                tile.set_ore(0, 0, 0, 0, False, 0, 0)
 
     def shift_world_up(self):
         temp = self.tiles[0]
@@ -152,10 +176,31 @@ class WorldManager:
             for _ in range(0, random.randint(6, 8)):
                 self.obj_man.add_object(RockParticle(particle_x + random.randint(-6, 6), particle_y + random.randint(-6, 6), tile.get_particle_color()))
 
-            tile.set_tile(False, 1)
+            tile.break_tile()
             self.drawing_man.add_screen_shake(5)
 
 
         
 
+    def generate_ore(self):
+        ore = Ore()
+        sprite = random.randint(3, 9)
+        color = pick_random_color()
+        rarity = random.uniform(0.1, 0.9)
+        value = (200 + ((1 - rarity) * 200)) + (100 * self.depth * 0.3)
+        
+        ore.set_ore(sprite, color, value, 1 + (1-rarity), True, False, rarity)
+        self.active_ores.append(ore)
+
+    def try_generating_ore_for_tile(self):
+        if random.uniform(0, 1) > 0.3:
+            return None
+        
+        if random.uniform(0, 1) < self.coal_ore.rarity: # generate coal
+            return self.coal_ore
+        
+        for ore in self.active_ores:
+            if random.uniform(0, 1) < ore.rarity:
+                return ore
             
+        return None
