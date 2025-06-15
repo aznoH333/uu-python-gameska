@@ -82,7 +82,7 @@ class Tile:
         if not self.ore.exists:
             return None
         elif self.ore.is_coal:
-            return (f"{self.ore.value}L", (89, 11, 117))
+            return (f"+{self.ore.value}L", (89, 11, 117))
         
 
         color = (255, 151, 16)
@@ -92,4 +92,4 @@ class Tile:
         elif self.ore.rarity < 0.4:
             color = (255, 245, 54)
 
-        return (f"{self.ore.value}$", color)
+        return (f"+{self.ore.value}$", color)

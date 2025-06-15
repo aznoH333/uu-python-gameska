@@ -41,6 +41,18 @@ class Shop(BaseObject):
 
         # display menu
         if self.open:
+            # render items
+            for i in range(0, len(self.items)):
+                item = self.items[i]
+                color = (255, 255, 255)
+                if i == self.index:
+                    color = (255, 255, 0)
+
+                price = ""
+                if item.price != 0:
+                    price = f"{item.price}$"
+                self.drawing_man.draw_text(f"{item.text}    {price}", 30, 180 + (i * 40), color)
+
             
             # index moving
             if self.interaction_cooldown <= 0:
@@ -65,17 +77,7 @@ class Shop(BaseObject):
                 self.index = 0
 
 
-            # render items
-            for i in range(0, len(self.items)):
-                item = self.items[i]
-                color = (255, 255, 255)
-                if i == self.index:
-                    color = (255, 255, 0)
-
-                price = ""
-                if item.price != 0:
-                    price = f"{item.price}$"
-                self.drawing_man.draw_text(f"{item.text}    {price}", 30, 180 + (i * 40), color)
+            
 
 
     def generate_random_item(self):

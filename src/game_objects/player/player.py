@@ -45,9 +45,12 @@ class Player(BaseObject):
         if self.engine.is_key_down(pygame.K_LEFT) and self.can_move():
             self.xm = gravitate_number(self.xm, -self.SPEED, self.ACCELERATION * delta)
             self.direction = PlayerDirection.LEFT
+            self.spend_fuel(0.01 * delta)
         elif self.engine.is_key_down(pygame.K_RIGHT) and self.can_move():
             self.xm = gravitate_number(self.xm, self.SPEED, self.ACCELERATION * delta)
             self.direction = PlayerDirection.RIGHT
+            self.spend_fuel(0.01 * delta)
+
         else:
             self.xm = gravitate_number(self.xm, 0, self.ACCELERATION * delta)
 
@@ -61,6 +64,8 @@ class Player(BaseObject):
         if self.tile_bellow and self.engine.is_key_down(pygame.K_UP) and self.can_move():
             self.tile_bellow = False 
             self.ym = -self.JUMP_STRENGTH
+            self.spend_fuel(0.02 * delta)
+
 
 
         # horizontal collisions
@@ -93,15 +98,18 @@ class Player(BaseObject):
             if self.engine.is_key_down(pygame.K_DOWN) and self.tile_bellow:
                 mining_result = self.world.damage_tile(self.x, self.y + self.height, self.mining_power)
                 self.direction = PlayerDirection.DOWN
+                self.spend_fuel(0.1 * delta)
                 self.reset_mining_cooldown()
 
             if self.engine.is_key_down(pygame.K_LEFT) and self.tile_left and self.tile_bellow:
                 mining_result = self.world.damage_tile(self.x - self.width, self.y, self.mining_power)
+                self.spend_fuel(0.1 * delta)
                 self.reset_mining_cooldown()
 
                 
             if self.engine.is_key_down(pygame.K_RIGHT) and self.tile_right and self.tile_bellow:
                 mining_result = self.world.damage_tile(self.x + self.width + (self.width / 2), self.y, self.mining_power)
+                self.spend_fuel(0.1 * delta)
                 self.reset_mining_cooldown()
             if mining_result[1]:
                 self.game_stats.add_fuel(mining_result[0])
@@ -148,3 +156,6 @@ class Player(BaseObject):
 
     def can_move(self):
         return self.active_shop == None or not self.active_shop.open
+    
+    def spend_fuel(self, ammount):
+        self.game_stats.add_fuel(-ammount * self.game_stats.get_fuel_efficiency())
