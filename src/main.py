@@ -21,7 +21,6 @@ game_stats = GameStats.get_instance()
 
 # spawn player
 obj_man.add_object(Player(0, 0))
-obj_man.add_object(Shop(64, 160, 0))
 
 
 

@@ -1,6 +1,5 @@
 import math
 from engine.utils import clamp_value
-from game_logic.world_manager import WorldManager
 from sprites.drawing_manager import DrawingManager
 
 
@@ -13,10 +12,10 @@ class GameStats:
     
     def __init__(self):
         self.money = 0
-        self.world_man = WorldManager.get_instance()
+        self.depth = 0
         self.drawing_man = DrawingManager.get_instance()
         self.fuel = 50
-        self.fuel_max = 50
+        self.max_fuel = 50
         self.fuel_efficiency = 1
         self.mining_power = 10
 
@@ -25,15 +24,15 @@ class GameStats:
 
     def update(self):
 
-        self.drawing_man.draw_text(f"Hloubka {round(self.world_man.get_depth() / 6.4)}m", 30, 42)
+        self.drawing_man.draw_text(f"Hloubka {round(self.depth / 6.4)}m", 30, 42)
         self.drawing_man.draw_text(f"Prachy {self.money}$", 30, 74, (240, 200, 7))
-        self.drawing_man.draw_text(f"Palivo {math.ceil(self.fuel)} / {self.fuel_max}L", 30, 106, (173, 0, 255))
+        self.drawing_man.draw_text(f"Palivo {math.ceil(self.fuel)} / {self.max_fuel}L", 30, 106, (173, 0, 255))
 
     def add_money(self, ammount):
         self.money += ammount
 
     def add_fuel(self, ammount):
-        self.fuel = clamp_value(self.fuel + ammount, 0, self.fuel_max)
+        self.fuel = clamp_value(self.fuel + ammount, 0, self.max_fuel)
 
     def get_fuel_efficiency(self):
-        return 1 - (self.fuel_efficiency / 100)
+        return 1 - (min(self.fuel_efficiency, 20) / 20)

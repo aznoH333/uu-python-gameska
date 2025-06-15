@@ -1,9 +1,11 @@
 import math
 from engine.engine import Engine
 from engine.utils import interpolate, interpolate_color, pick_random_color
+from game_logic.game_stats import GameStats
 from game_logic.ore import Ore
 from game_logic.world_stats import WorldStats
 from game_objects.rock_particle import RockParticle
+from game_objects.shop.shop import Shop
 from game_objects.value_particle import ValueParticle
 from sprites.drawing_manager import DrawingManager
 from game_logic.tile import Tile
@@ -27,6 +29,7 @@ class WorldManager:
     WORLD_WIDTH = 20
     WORLD_HEIGHT = 13
     TOTAL_WIDTH = WORLD_WIDTH * TILE_SIZE
+    DISTANCE_BETWEEN_SHOPS = 640
 
     def __init__(self):
         self.tiles = []
@@ -37,6 +40,8 @@ class WorldManager:
         self.drawing_man = DrawingManager.get_instance()
         self.engine = Engine.get_instance()
         self.obj_man = None
+        self.next_shop = self.DISTANCE_BETWEEN_SHOPS
+        self.game_stats = GameStats.get_instance()
 
         # init colors
         self.current_color = WorldStats(0)
@@ -65,6 +70,8 @@ class WorldManager:
         
 
     def update(self):
+        self.game_stats.depth = self.depth
+        
         # draw tiles
         for y in range(0, self.WORLD_HEIGHT):
             for x in range(0, self.WORLD_WIDTH):
@@ -100,6 +107,9 @@ class WorldManager:
         progress = (self.depth - self.current_color.get_start_depth()) / (self.next_color.get_start_depth() - self.current_color.get_start_depth())
         color = interpolate_color(self.current_color.color, self.next_color.color, progress)
         toughness = interpolate(self.current_color.toughness, self.next_color.toughness, progress)
+        
+
+        
         for x in range(0, self.WORLD_WIDTH):
             tile = self.tiles[y][x]
             tile.set_tile(True, 0, color, toughness)
@@ -110,6 +120,12 @@ class WorldManager:
                 tile.set_ore(ore.sprite, ore.color, ore.value, ore.toughness_multiplier, ore.exists, ore.is_coal, ore.rarity)
             else:
                 tile.set_ore(0, 0, 0, 0, False, 0, 0)
+
+        # generate shop
+        if self.next_shop < self.depth:
+            self.next_shop = self.depth + self.DISTANCE_BETWEEN_SHOPS
+            self.obj_man.add_object(Shop(random.randint(0, self.WORLD_WIDTH) * self.TILE_SIZE, self.depth - self.world_offset + (self.WORLD_HEIGHT * self.TILE_SIZE), self.depth))
+        
 
     def shift_world_up(self):
         temp = self.tiles[0]

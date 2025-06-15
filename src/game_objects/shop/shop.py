@@ -83,7 +83,7 @@ class Shop(BaseObject):
 
 
     def generate_random_item(self, depth):
-        price = math.floor((200 + (math.pow(1.5 - 0.5, 2) * 600)) + (depth)) * random.randint(45, 55)
+        price = math.floor((500) + (depth)) * random.randint(20, 25)
 
         index = random.randint(2, 4)
         type = ShopItemType(index)
