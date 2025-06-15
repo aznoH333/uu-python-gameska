@@ -13,6 +13,7 @@ class GameStats:
         self.money = 0
         self.world_man = WorldManager.get_instance()
         self.drawing_man = DrawingManager.get_instance()
+        self.fuel = 50
         
         pass
 
@@ -20,3 +21,9 @@ class GameStats:
 
         self.drawing_man.draw_text(f"Hloubka {round(self.world_man.get_depth() / 6.4)}m", 30, 42)
         self.drawing_man.draw_text(f"Prachy {self.money}", 30, 74)
+
+    def add_money(self, ammount):
+        self.money += ammount
+
+    def add_fuel(self, ammount):
+        self.fuel += ammount

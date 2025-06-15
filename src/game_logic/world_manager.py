@@ -156,12 +156,12 @@ class WorldManager:
         converted_x = round(x / self.TILE_SIZE)
         converted_y = round(self.convert_to_world_y(y) / self.TILE_SIZE)
         if converted_x < 0 or converted_x > self.WORLD_WIDTH:
-            return
+            return (0, False)
         
         tile = self.get_tile_from_world_coord(converted_x, converted_y)
         # check if exists
         if not tile.is_solid():
-            return
+            return (0, False)
         
         # damage tile
         self.drawing_man.add_screen_shake(3)
@@ -175,10 +175,10 @@ class WorldManager:
         if not tile.is_stable():
             for _ in range(0, random.randint(6, 8)):
                 self.obj_man.add_object(RockParticle(particle_x + random.randint(-6, 6), particle_y + random.randint(-6, 6), tile.get_particle_color()))
-
-            tile.break_tile()
             self.drawing_man.add_screen_shake(5)
-
+            is_coal = tile.is_coal()
+            return (int(math.floor(tile.break_tile())), is_coal)
+        return (0, False)
 
         
 
@@ -193,7 +193,7 @@ class WorldManager:
         self.active_ores.append(ore)
 
     def try_generating_ore_for_tile(self):
-        if random.uniform(0, 1) > 0.3:
+        if random.uniform(0, 1) > 0.25:
             return None
         
         if random.uniform(0, 1) < self.coal_ore.rarity: # generate coal

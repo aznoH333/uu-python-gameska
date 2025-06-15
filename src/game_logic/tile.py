@@ -73,3 +73,6 @@ class Tile:
         self.set_tile(False, 1)
         self.ore.exists = False
         return self.ore.value
+    
+    def is_coal(self):
+        return self.ore.exists and self.ore.is_coal

@@ -1,6 +1,7 @@
 import math
 from engine.engine import Engine
 from engine.utils import gravitate_number, signum
+from game_logic.game_stats import GameStats
 from game_objects.player.player_direction import PlayerDirection
 from objects.base_object import BaseObject
 import pygame
@@ -35,6 +36,7 @@ class Player(BaseObject):
         self.direction = PlayerDirection.RIGHT
         self.mining_power = 10 # TODO : mining power upgrades
         self.mining_cooldown = 0
+        self.game_stats = GameStats.get_instance()
 
     def update(self):
         delta = self.engine.get_delta()
@@ -82,23 +84,34 @@ class Player(BaseObject):
         if self.world.collides_with_tile(self.x, self.y, self.width, self.height):
             self.y -= 1
 
+
         #mining
+
         if self.mining_cooldown <= 0:
+            mining_result = (0, False)
+            
             if self.engine.is_key_down(pygame.K_DOWN) and self.tile_bellow:
-                self.world.damage_tile(self.x, self.y + self.height, self.mining_power)
+                mining_result = self.world.damage_tile(self.x, self.y + self.height, self.mining_power)
                 self.direction = PlayerDirection.DOWN
                 self.reset_mining_cooldown()
 
             if self.engine.is_key_down(pygame.K_LEFT) and self.tile_left and self.tile_bellow:
-                self.world.damage_tile(self.x - self.width, self.y, self.mining_power)
+                mining_result = self.world.damage_tile(self.x - self.width, self.y, self.mining_power)
                 self.reset_mining_cooldown()
 
                 
             if self.engine.is_key_down(pygame.K_RIGHT) and self.tile_right and self.tile_bellow:
-                self.world.damage_tile(self.x + self.width + (self.width / 2), self.y, self.mining_power)
+                mining_result = self.world.damage_tile(self.x + self.width + (self.width / 2), self.y, self.mining_power)
                 self.reset_mining_cooldown()
+            print(f"{mining_result}")
+            if mining_result[1]:
+                self.game_stats.add_fuel(mining_result[0])
+            else:
+                self.game_stats.add_money(mining_result[1])
         else:
             self.mining_cooldown -= delta
+
+        
 
 
         
